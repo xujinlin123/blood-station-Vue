@@ -1,0 +1,82 @@
+{
+	"pages": [
+		{
+			"path": "pages/login/login",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/register/register",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/user-service/user-service",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/privacy-policy/privacy-policy",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/nurse/information/information",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/nurse/community/community",
+			"style": {
+				"usingComponents": {}
+			}
+		},
+		{
+			"path": "pages/nurse/profile/profile",
+			"style": {
+				"usingComponents": {}
+			}
+		}
+	],
+	"globalStyle": {
+	  "navigationStyle": "custom",
+	  "backgroundColor": "#ffffff",
+	  "backgroundTextStyle": "light",
+	  "enablePullDownRefresh": true
+	},
+	"tabBar": {
+	  "color": "#000000",
+	  "selectedColor": "#E7624f",
+	  "borderStyle": "black",
+	  "backgroundColor": "#ffffff",
+	  "list": [
+		{
+		  "pagePath": "pages/nurse/information/information",
+		  "text": "信息发布",
+		  "iconPath": "src/static/images/信息发布——未选中.png",
+		  "selectedIconPath": "src/static/images/信息发布——选中.png"
+		},
+		{
+		  "pagePath": "pages/nurse/community/community",
+		  "text": "科普社区",
+		  "iconPath": "src/static/images/科普社区——未选中.png",
+		  "selectedIconPath": "src/static/images/科普社区——选中.png"
+		},
+		{
+		  "pagePath": "pages/nurse/profile/profile",
+		  "text": "个人主页",
+		  "iconPath": "src/static/images/我的——未选中.png",
+		  "selectedIconPath": "src/static/images/我的——选中.png"
+		}
+	  ]
+	}
+  }
+  
+
+
+
