@@ -1,0 +1,1 @@
+{"version":3,"file":"privacy-policy.js","sources":["../uniPage:/cGFnZXMvcHJpdmFjeS1wb2xpY3kvcHJpdmFjeS1wb2xpY3kudnVl"],"sourcesContent":["import MiniProgramPage from 'C:/Users/谢濠骏/Desktop/blood/blood-station-Vue/src/pages/privacy-policy/privacy-policy.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,GAAG,WAAW,eAAe;"}

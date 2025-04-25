@@ -360,6 +360,20 @@
       // 初始化 markdown 渲染器
       this.markdownRenderer = new MarkdownIt();
     },
+
+    onShow() {
+    // 从本地存储读取参数
+    const selectedTab = uni.getStorageSync('SELECTED_TAB');
+    
+    if (selectedTab) {
+      this.activeTab = selectedTab;
+        // 加载历史聊天记录
+        this.loadChatHistory();
+        // 创建新的对话
+        this.newChat();
+      uni.removeStorageSync('SELECTED_TAB'); // 清除已使用的存储
+    }
+  },
     
     methods: {
       // 功能栏选择功能

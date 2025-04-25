@@ -1,308 +1,11 @@
-<template>
-    <view>
-      <!-- 页面 1 -->
-      <view class="page-container1" v-if="!showRecruitPage && !showDonorInfoPage && !showAnswerPage">
-        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
-        <view class="content-area">
-          <view class="platform-title">献血 e 站</view>
-          
-          <!-- 第一部分：轮播图 -->
-          <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true">
-            <swiper-item>
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/1.png" mode="aspectFill" class="banner-image"></image>
-            </swiper-item>
-            <swiper-item>
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/2.png" mode="aspectFill" class="banner-image"></image>
-            </swiper-item>
-            <swiper-item>
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/3.png" mode="aspectFill" class="banner-image"></image>
-            </swiper-item>
-          </swiper>
-          
-          <!-- 第三部分：图标 -->
-          <view class="icon-container" v-if="identitySelected == '兼职护士'">
-            <view class="icon-item" @tap="goToRecruitPage" data-type="emergency">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布紧急信息.png" class="function-icon"></image>
-              <text class="icon-text">发布紧急信息</text>
-            </view>
-            <view class="icon-item" @tap="goToRecruitPage" data-type="activity">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布献血者活动通知.png" class="function-icon"></image>
-              <text class="icon-text">招募活动发布</text>
-            </view>
-            <view class="icon-item" @tap="goToDonorInfoPage">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/管理献血者信息.png" class="function-icon"></image>
-              <text class="icon-text">献血者信息</text>
-            </view>
-          </view>
-          <view class="icon-container" v-if="identitySelected == '管理员'">
-            <view class="icon-item" @tap="goToActivityCheck">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/活动审核.png" class="function-icon"></image>
-              <text class="icon-text">活动审核</text>
-            </view>
-            <view class="icon-item">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/活动数据分析.png" class="function-icon"></image>
-              <text class="icon-text">活动数据分析</text>
-            </view>
-            <view class="icon-item" @tap="goToDonorInfoPage">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/管理献血者信息.png" class="function-icon"></image>
-              <text class="icon-text">管理献血者信息</text>
-            </view>
-          </view>
-          <view class="icon-container" v-if="identitySelected == '研究所专家'">
-            <view class="icon-item" @tap="goToRecruitPage" data-type="emergency">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布紧急信息.png" class="function-icon"></image>
-              <text class="icon-text">发布紧急信息</text>
-            </view>
-            <view class="icon-item">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/信息中心.png" class="function-icon"></image>
-              <text class="icon-text">信息中心</text>
-            </view>
-            <view class="icon-item">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/推荐临床专家.png" class="function-icon"></image>
-              <text class="icon-text">推荐临床医生</text>
-            </view>
-            <view class="icon-item">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/推荐稀有血源.png" class="function-icon"></image>
-              <text class="icon-text">推荐稀有血型</text>
-            </view>
-          </view>
-          <view class="icon-container" v-if="identitySelected == '献血者'">
-            <view class="icon-item" @tap="goToRecruitPage" data-type="emergency">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/紧急信息查看.png" class="function-icon"></image>
-              <text class="icon-text">紧急信息查看</text>
-            </view>
-            <view class="icon-item">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/已报名活动.png" class="function-icon"></image>
-              <text class="icon-text">已报名活动</text>
-            </view>
-            <view class="icon-item">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/预约记录.png" class="function-icon"></image>
-              <text class="icon-text">预约记录</text>
-            </view>
-          </view>
-          
-          <!-- 今日科普 -->
-          <view class="section">
-            <navigator class="nav-title">
-              <view class="title">今日科普</view>
-              <navigator class="nav-arrow">
-                <text class="arrow-text">更多</text>
-                <image class="arrow" src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/进入.png"></image>
-              </navigator>
-            </navigator>
-      
-            <!-- 循环渲染科普问题 -->
-            <view class="qa-list">
-              <template v-for="(item, index) in scienceList" :key="index">
-                <!-- 点击问题触发 showAnswerDialog 方法，并传递索引 -->
-                <view class="qa-item" @tap="showAnswerDialog" :data-index="index">
-                  <view class="question">
-                    <text class="q-mark">Q{{ index + 1 }}.</text>
-                    {{ item.question }}
-                    <!-- <image class="arrow" src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/进入.png"/> -->
-                    <image class="arrow" src="/src/static/images/hoticon1.png"/>
-                  </view>
-                </view>
-              </template>
-            </view>
-          </view>
-      
-          <!-- 第四部分：献血活动发布栏框 -->
-          <view class="activity-container">
-            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景图.png" class="background-image"></image>
-            <view class="header-content">
-              <view class="activity-header">献血活动发布栏</view>
-              <scroll-view scroll-y :style="'height: ' + scrollHeight + 'px;'" enhanced>
-                <view class="activity-content">
-                  <view class="activity-list">
-                    <template v-for="(item, index) in activities" :key="item.id">
-                      <view class="activity-item">
-                        <image :src="item.imageUrl || 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报.png'" class="activity-image"></image>
-                        <view class="activity-info">
-                          <view class="activity-title">{{ item.title }}</view>
-                          <view class="activity-participants">已报名：{{ item.count }}人</view>
-                          <button :class="['signup-button', item.isSigned ? 'signed' : '']" @tap="toggleSign" :data-index="index">
-                            {{ item.isSigned ? '已报名' : '报名' }}
-                          </button>
-                        </view>
-                      </view>
-                    </template>
-                  </view>
-                </view>
-              </scroll-view>
-            </view>
-          </view>
-        </view>
-      </view>
-      
-      <!-- 页面 2：招募/发布页面 -->
-      <view class="page-container2" v-if="showRecruitPage">
-        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
-        <view class="content-area">
-          <view class="platform-title">献血 e 站</view>
-          <!-- 紧急信息/活动发布中心 -->
-          <view class="container">
-            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
-            <view class="header">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
-              <text class="header-title">
-                {{ recruitType === 'emergency' ? '紧急信息发布中心' : '献血活动发布中心' }}
-              </text>
-            </view>
-      
-            <!-- 信息列表 -->
-            <view class="info-list">
-              <template v-for="(item, index) in infoList" :key="item.timestamp">
-                <view class="info-item">
-                  <text class="info-title">紧急招募献血</text>
-                  <text class="info-detail">招募血型: {{ item.bloodType }}</text>
-                  <text class="info-detail">招募时间: {{ item.recruitTime }}</text>
-                  <text class="info-detail">献血地点: {{ item.location }}</text>
-                  <text class="info-detail">招募人群: {{ item.targetGroup }}</text>
-                  <text class="info-detail">招募数量: {{ item.recruitNumber }} 人</text>
-                  <text class="info-detail">献血条件: {{ item.condition }}</text>
-                </view>
-              </template>
-            </view>
-      
-            <!-- 发布招募按钮 -->
-            <view class="recruit-button" @tap="openPopup">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/加号.png" class="recruit-icon"></image>
-              <text class="recruit-text">
-                {{ recruitType === 'emergency' ? '发布紧急招募活动' : '发布招募活动' }}
-              </text>
-            </view>
-          </view>
-        </view>
-      
-        <!-- 弹窗 -->
-        <view class="popup-container" v-if="showPopup">
-          <view class="popup-box">
-            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/关闭.png" class="close-icon" @tap="closePopup"></image>
-            <!-- 弹窗标题 -->
-            <view class="popup-title">
-              <text class="popup-title-text">
-                {{ recruitType === 'emergency' ? '发布紧急招募信息' : '发布招募活动' }}
-              </text>
-            </view>
-            <!-- 输入框 -->
-            <view class="form-group">
-              <text class="form-label">招募血型</text>
-              <picker mode="selector" :range="bloodTypes" @change="onBloodTypeChange">
-                <view class="picker">{{ selectedBloodType }}</view>
-              </picker>
-            </view>
-            <view class="form-group">
-              <text class="form-label">招募时间</text>
-              <input class="input-box" placeholder="x年x月x日-y年y月y日" @input="onInputChange" data-field="recruitTime" />
-            </view>
-            <view class="form-group">
-              <text class="form-label">招募地点</text>
-              <input class="input-box" placeholder="请输入招募地点" @input="onInputChange" data-field="location" />
-            </view>
-            <view class="form-group">
-              <text class="form-label">招募人群</text>
-              <input class="input-box" placeholder="请输入招募人群" @input="onInputChange" data-field="targetGroup" />
-            </view>
-            <view class="form-group">
-              <text class="form-label">招募数量</text>
-              <input class="input-box" placeholder="请输入招募人数" type="number" @input="onInputChange" data-field="recruitNumber" />
-            </view>
-            <view class="form-group">
-              <text class="form-label">献血条件</text>
-              <picker mode="selector" :range="conditions" @change="onConditionChange">
-                <view class="picker">{{ selectedCondition }}</view>
-              </picker>
-            </view>
-            <view class="confirm-btn" @tap="submitRecruitment">确认发布</view>
-          </view>
-        </view>
-      </view>
-      
-      <!-- 页面 3：献血者信息页面 -->
-      <view class="page-container3" v-if="showDonorInfoPage">
-        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
-        <view class="content-area">
-          <view class="platform-title">献血 e 站</view>
-          <!-- 献血者信息列表 -->
-          <view class="container">
-            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
-            <view class="header">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
-              <text class="header-title">献血者信息管理</text>
-            </view>
-            <!-- 表格化列表 -->
-            <view class="donor-list">
-              <!-- 表头 -->
-              <view class="donor-row header-row">
-                <text class="col-name">用户名称</text>
-                <text class="col-blood">用户血型</text>
-                <text class="col-age">用户年龄</text>
-                <text class="col-action">操作</text>
-              </view>
-              <!-- 数据行 -->
-              <template v-for="(item, index) in donorList" :key="item.id">
-                <view class="donor-row">
-                  <text class="col-name">{{ item.name || '未命名' }}</text>
-                  <text class="col-blood">{{ item.bloodType || '未知' }}</text>
-                  <text class="col-age">{{ item.age || '未知' }}</text>
-                  <text class="col-action">查看详情</text>
-                </view>
-                <!-- 调试文本 -->
-                <text>当前数据：{{ JSON.stringify(item) }}</text>
-              </template>
-            </view>
-          </view>
-        </view>
-      </view>
-      
-      <!-- 页面 4：信息详情页面 -->
-      <view class="page-container4" v-if="showInfoPage">
-        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
-        <view class="content-area">
-          <view class="platform-title">献血 e 站</view>
-          <view class="container">
-            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
-            <view class="header">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
-              <text class="header-title">
-                {{ infoType === 'emergency' ? '紧急信息发布中心' : '已报名活动' }}
-              </text>
-            </view>
-          </view>
-        </view>
-      </view>
-      
-      <!-- 页面 4（另一版）：科普回答页面 -->
-      <view class="page-container4" v-if="showAnswerPage">
-        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
-        <view class="content-area">
-          <view class="platform-title">献血 e 站</view>
-          <view class="container">
-            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
-            <view class="header">
-              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
-              <!-- 动态绑定当前问题标题 -->
-              <text class="header-title">{{ currentQuestion }}</text>
-            </view>
-            <!-- 答案内容 -->
-            <view class="answer-content">
-              <!-- 主答案 -->
-              <text>{{ currentAnswer }}</text>
-              <!-- 子答案（可无） -->
-              <view v-if="currentSubAnswer" class="sub-answer">
-                <text>{{ currentSubAnswer }}</text>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-    </view>
-  </template>
-  
-
 <script>
+//引入组件
+import customFab from '@/components/CustomFab.vue'
 export default {
+  // 注册组件
+  components: {
+    customFab
+  },
   data() {
     return {
       identitySelected: "",
@@ -545,6 +248,321 @@ export default {
 }
 </script>
 
+<template>
+    <view>
+      <customFab />
+      <!-- 页面 1 -->
+      <view class="page-container1" v-if="!showRecruitPage && !showDonorInfoPage && !showAnswerPage">
+        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
+        <view class="content-area">
+          <view class="platform-title">献血 e 站</view>
+          
+          <!-- 第一部分：轮播图 -->
+          <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true">
+            <swiper-item>
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/1.png" mode="aspectFill" class="banner-image"></image>
+            </swiper-item>
+            <swiper-item>
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/2.png" mode="aspectFill" class="banner-image"></image>
+            </swiper-item>
+            <swiper-item>
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/3.png" mode="aspectFill" class="banner-image"></image>
+            </swiper-item>
+          </swiper>
+          
+          <!-- 第三部分：图标 -->
+          <view class="icon-container" v-if="identitySelected == '兼职护士'">
+            <view class="icon-item" @tap="goToRecruitPage" data-type="emergency">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布紧急信息.png" class="function-icon"></image>
+              <text class="icon-text">发布紧急信息</text>
+            </view>
+            <view class="icon-item" @tap="goToRecruitPage" data-type="activity">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布献血者活动通知.png" class="function-icon"></image>
+              <text class="icon-text">招募活动发布</text>
+            </view>
+            <view class="icon-item" @tap="goToLecturePage">
+              <image src="../../../static/images/主题讲座.png" class="function-icon"></image>
+              <text class="icon-text">主题讲座</text>
+            </view>
+            <view class="icon-item" @tap="goToDonorInfoPage">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/管理献血者信息.png" class="function-icon"></image>
+              <text class="icon-text">献血者信息</text>
+            </view>
+          </view>
+          <view class="icon-container" v-if="identitySelected == '管理员'">
+            <view class="icon-item" @tap="goToActivityCheck">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/活动审核.png" class="function-icon"></image>
+              <text class="icon-text">活动审核</text>
+            </view>
+            <view class="icon-item">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/活动数据分析.png" class="function-icon"></image>
+              <text class="icon-text">活动数据分析</text>
+            </view>
+            <view class="icon-item" @tap="goToDonorInfoPage">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/管理献血者信息.png" class="function-icon"></image>
+              <text class="icon-text">管理献血者信息</text>
+            </view>
+          </view>
+          <view class="icon-container" v-if="identitySelected == '研究所专家'">
+            <view class="icon-item" @tap="goToRecruitPage" data-type="emergency">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布紧急信息.png" class="function-icon"></image>
+              <text class="icon-text">发布紧急信息</text>
+            </view>
+            <view class="icon-item">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/信息中心.png" class="function-icon"></image>
+              <text class="icon-text">信息中心</text>
+            </view>
+            <view class="icon-item">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/推荐临床专家.png" class="function-icon"></image>
+              <text class="icon-text">推荐临床医生</text>
+            </view>
+            <view class="icon-item">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/推荐稀有血源.png" class="function-icon"></image>
+              <text class="icon-text">推荐稀有血型</text>
+            </view>
+          </view>
+          <view class="icon-container" v-if="identitySelected == '献血者'">
+            <view class="icon-item" @tap="goToRecruitPage" data-type="emergency">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/紧急信息查看.png" class="function-icon"></image>
+              <text class="icon-text">紧急信息查看</text>
+            </view>
+            <view class="icon-item">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/已报名活动.png" class="function-icon"></image>
+              <text class="icon-text">已报名活动</text>
+            </view>
+            <view class="icon-item">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/预约记录.png" class="function-icon"></image>
+              <text class="icon-text">预约记录</text>
+            </view>
+          </view>
+          
+          <!-- 今日科普 -->
+          <view class="section">
+            <navigator class="nav-title">
+              <view class="title">今日科普</view>
+              <navigator class="nav-arrow">
+                <text class="arrow-text">更多</text>
+                <image class="arrow" src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/进入.png"></image>
+              </navigator>
+            </navigator>
+      
+            <!-- 循环渲染科普问题 -->
+            <view class="qa-list">
+              <template v-for="(item, index) in scienceList" :key="index">
+                <!-- 点击问题触发 showAnswerDialog 方法，并传递索引 -->
+                <view class="qa-item" @tap="showAnswerDialog" :data-index="index">
+                  <view class="question">
+                    <!-- <text class="q-mark">Q{{ index + 1 }}.</text> -->
+                     <image
+                      class="rankingIcon"
+                      mode="scaleToFill"
+                       :src="`https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/hoticon${index+1}.png`"
+                     />
+                    <text>{{ item.question }}</text>
+                    <text class="hotText">热</text>
+                    <!-- <image class="arrow" src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/进入.png"/> -->
+                    <!-- <image class="arrow" src="/src/static/images/hoticon1.png"/> -->
+                  </view>
+                </view>
+              </template>
+            </view>
+          </view>
+      
+          <!-- 第四部分：献血活动发布栏框 -->
+          <view class="activity-container">
+            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景图.png" class="background-image"></image>
+            <view class="header-content">
+              <view class="activity-header">献血活动发布栏</view>
+              <scroll-view scroll-y :style="'height: ' + scrollHeight + 'px;'" enhanced>
+                <view class="activity-content">
+                  <view class="activity-list">
+                    <template v-for="(item, index) in activities" :key="item.id">
+                      <view class="activity-item">
+                        <image :src="item.imageUrl || 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报.png'" class="activity-image"></image>
+                        <view class="activity-info">
+                          <view class="activity-title">{{ item.title }}</view>
+                          <view class="activity-participants">已报名：{{ item.count }}人</view>
+                          <button :class="['signup-button', item.isSigned ? 'signed' : '']" @tap="toggleSign" :data-index="index">
+                            {{ item.isSigned ? '已报名' : '报名' }}
+                          </button>
+                        </view>
+                      </view>
+                    </template>
+                  </view>
+                </view>
+              </scroll-view>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 页面 2：招募/发布页面 -->
+      <view class="page-container2" v-if="showRecruitPage">
+        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
+        <view class="content-area">
+          <view class="platform-title">献血 e 站</view>
+          <!-- 紧急信息/活动发布中心 -->
+          <view class="container">
+            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
+            <view class="header">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
+              <text class="header-title">
+                {{ recruitType === 'emergency' ? '紧急信息发布中心' : '献血活动发布中心' }}
+              </text>
+            </view>
+      
+            <!-- 信息列表 -->
+            <view class="info-list">
+              <template v-for="(item, index) in infoList" :key="item.timestamp">
+                <view class="info-item">
+                  <text class="info-title">紧急招募献血</text>
+                  <text class="info-detail">招募血型: {{ item.bloodType }}</text>
+                  <text class="info-detail">招募时间: {{ item.recruitTime }}</text>
+                  <text class="info-detail">献血地点: {{ item.location }}</text>
+                  <text class="info-detail">招募人群: {{ item.targetGroup }}</text>
+                  <text class="info-detail">招募数量: {{ item.recruitNumber }} 人</text>
+                  <text class="info-detail">献血条件: {{ item.condition }}</text>
+                </view>
+              </template>
+            </view>
+      
+            <!-- 发布招募按钮 -->
+            <view class="recruit-button" @tap="openPopup">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/加号.png" class="recruit-icon"></image>
+              <text class="recruit-text">
+                {{ recruitType === 'emergency' ? '发布紧急招募活动' : '发布招募活动' }}
+              </text>
+            </view>
+          </view>
+        </view>
+      
+        <!-- 弹窗 -->
+        <view class="popup-container" v-if="showPopup">
+          <view class="popup-box">
+            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/关闭.png" class="close-icon" @tap="closePopup"></image>
+            <!-- 弹窗标题 -->
+            <view class="popup-title">
+              <text class="popup-title-text">
+                {{ recruitType === 'emergency' ? '发布紧急招募信息' : '发布招募活动' }}
+              </text>
+            </view>
+            <!-- 输入框 -->
+            <view class="form-group">
+              <text class="form-label">招募血型</text>
+              <picker mode="selector" :range="bloodTypes" @change="onBloodTypeChange">
+                <view class="picker">{{ selectedBloodType }}</view>
+              </picker>
+            </view>
+            <view class="form-group">
+              <text class="form-label">招募时间</text>
+              <input class="input-box" placeholder="x年x月x日-y年y月y日" @input="onInputChange" data-field="recruitTime" />
+            </view>
+            <view class="form-group">
+              <text class="form-label">招募地点</text>
+              <input class="input-box" placeholder="请输入招募地点" @input="onInputChange" data-field="location" />
+            </view>
+            <view class="form-group">
+              <text class="form-label">招募人群</text>
+              <input class="input-box" placeholder="请输入招募人群" @input="onInputChange" data-field="targetGroup" />
+            </view>
+            <view class="form-group">
+              <text class="form-label">招募数量</text>
+              <input class="input-box" placeholder="请输入招募人数" type="number" @input="onInputChange" data-field="recruitNumber" />
+            </view>
+            <view class="form-group">
+              <text class="form-label">献血条件</text>
+              <picker mode="selector" :range="conditions" @change="onConditionChange">
+                <view class="picker">{{ selectedCondition }}</view>
+              </picker>
+            </view>
+            <view class="confirm-btn" @tap="submitRecruitment">确认发布</view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 页面 3：献血者信息页面 -->
+      <view class="page-container3" v-if="showDonorInfoPage">
+        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
+        <view class="content-area">
+          <view class="platform-title">献血 e 站</view>
+          <!-- 献血者信息列表 -->
+          <view class="container">
+            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
+            <view class="header">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
+              <text class="header-title">献血者信息管理</text>
+            </view>
+            <!-- 表格化列表 -->
+            <view class="donor-list">
+              <!-- 表头 -->
+              <view class="donor-row header-row">
+                <text class="col-name">用户名称</text>
+                <text class="col-blood">用户血型</text>
+                <text class="col-age">用户年龄</text>
+                <text class="col-action">操作</text>
+              </view>
+              <!-- 数据行 -->
+              <template v-for="(item, index) in donorList" :key="item.id">
+                <view class="donor-row">
+                  <text class="col-name">{{ item.name || '未命名' }}</text>
+                  <text class="col-blood">{{ item.bloodType || '未知' }}</text>
+                  <text class="col-age">{{ item.age || '未知' }}</text>
+                  <text class="col-action">查看详情</text>
+                </view>
+                <!-- 调试文本 -->
+                <text>当前数据：{{ JSON.stringify(item) }}</text>
+              </template>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 页面 4：信息详情页面 -->
+      <view class="page-container4" v-if="showInfoPage">
+        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
+        <view class="content-area">
+          <view class="platform-title">献血 e 站</view>
+          <view class="container">
+            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
+            <view class="header">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
+              <text class="header-title">
+                {{ infoType === 'emergency' ? '紧急信息发布中心' : '已报名活动' }}
+              </text>
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <!-- 页面 4（另一版）：科普回答页面 -->
+      <view class="page-container4" v-if="showAnswerPage">
+        <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
+        <view class="content-area">
+          <view class="platform-title">献血 e 站</view>
+          <view class="container">
+            <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布栏背景.png" class="container-bg"></image>
+            <view class="header">
+              <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/返回.png" class="back-icon" @tap="goBack"></image>
+              <!-- 动态绑定当前问题标题 -->
+              <text class="header-title">{{ currentQuestion }}</text>
+            </view>
+            <!-- 答案内容 -->
+            <view class="answer-content">
+              <!-- 主答案 -->
+              <text>{{ currentAnswer }}</text>
+              <!-- 子答案（可无） -->
+              <view v-if="currentSubAnswer" class="sub-answer">
+                <text>{{ currentSubAnswer }}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+
+    </view>
+  </template>
+
 <style>
 /* pages/nurse/information/information.wxss */
 /* 设置页面的高度为100%，并隐藏滚动条 */
@@ -680,6 +698,7 @@ page {
     padding: 15rpx 0;
     border-bottom: 1rpx solid #eee;
     margin-bottom: 20rpx;
+    background-color: #f79999;
 }
 
 /* 活动背景图片，填充整个容器 */
@@ -1096,6 +1115,8 @@ page {
   /* 板块标题 */
   .section{
     background-color: rgb(247, 153, 153);
+    width: 92%;
+    border-radius: 16rpx;
   }
   
   
@@ -1113,14 +1134,16 @@ page {
     margin: 1px;
     padding: 15px;
     height: 15rpx;
-    background: #fff;
+    display: flex;
+    align-items: center;
     border-radius: 3px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: linear-gradient(to right,#febab7, #fff);
   }
   
   .question {
     font-size: 14px;
-    color: #666;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -1138,6 +1161,21 @@ page {
     width: 16px;
     height: 16px;
     margin-left: auto;
+  }
+
+  /* 排行榜图标设置 */
+  .rankingIcon{
+    width: 16px;
+    height: 16px;
+    margin-right: 10rpx;
+  }
+
+  .hotText{
+    display: block;
+    background-color: #fdbebb;
+    padding: 8rpx;
+    border-radius: 8rpx;
+    color: #d9534f;
   }
   
   .answer {

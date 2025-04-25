@@ -1,0 +1,1 @@
+{"version":3,"file":"user-service.js","sources":["../uniPage:/cGFnZXMvdXNlci1zZXJ2aWNlL3VzZXItc2VydmljZS52dWU"],"sourcesContent":["import MiniProgramPage from 'C:/Users/谢濠骏/Desktop/blood/blood-station-Vue/src/pages/user-service/user-service.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AACA,GAAG,WAAW,eAAe;"}
