@@ -1,6 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
 <script>
 export default {
   data() {
@@ -183,8 +181,6 @@ export default {
     }
   }
 }
-=======
->>>>>>> temp-work
 <script setup>
 import { ref, onBeforeUnmount } from 'vue'
 
@@ -365,10 +361,6 @@ const handleMenuItem = (item) => {
   })
   closeMenu()
 }
-<<<<<<< HEAD
-=======
->>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
->>>>>>> temp-work
 </script>
 
 <template>
