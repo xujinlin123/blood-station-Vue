@@ -331,9 +331,6 @@ import { ref, onMounted } from 'vue'
       isLiked: false,
       isFavorited: false
     },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
 
     onShow() {
     // 从本地存储读取参数
@@ -882,8 +879,6 @@ import { ref, onMounted } from 'vue'
             }
           }
         });
-=======
->>>>>>> temp-work
     {
       id: 3,
       authorName: "刘护士",
@@ -916,10 +911,6 @@ import { ref, onMounted } from 'vue'
       key: 'userIdentity',
       success: (res) => {
         Token.value = res.data.token
-<<<<<<< HEAD
-=======
->>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
->>>>>>> temp-work
       }
     })
     
