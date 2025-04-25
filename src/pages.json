@@ -58,20 +58,20 @@
 		{
 		  "pagePath": "pages/nurse/information/information",
 		  "text": "信息发布",
-		  "iconPath": "src/static/images/信息发布——未选中.png",
-		  "selectedIconPath": "src/static/images/信息发布——选中.png"
+		  "iconPath": "/static/images/信息发布——未选中.png",
+		  "selectedIconPath": "/static/images/信息发布——选中.png"
 		},
 		{
 		  "pagePath": "pages/nurse/community/community",
 		  "text": "科普社区",
-		  "iconPath": "src/static/images/科普社区——未选中.png",
-		  "selectedIconPath": "src/static/images/科普社区——选中.png"
+		  "iconPath": "/static/images/科普社区——未选中.png",
+		  "selectedIconPath": "/static/images/科普社区——选中.png"
 		},
 		{
 		  "pagePath": "pages/nurse/profile/profile",
 		  "text": "个人主页",
-		  "iconPath": "src/static/images/我的——未选中.png",
-		  "selectedIconPath": "src/static/images/我的——选中.png"
+		  "iconPath": "/static/images/我的——未选中.png",
+		  "selectedIconPath": "/static/images/我的——选中.png"
 		}
 	  ]
 	}

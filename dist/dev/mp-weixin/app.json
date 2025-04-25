@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/register/register",
+    "pages/user-service/user-service",
+    "pages/privacy-policy/privacy-policy",
+    "pages/nurse/information/information",
+    "pages/nurse/community/community",
+    "pages/nurse/profile/profile"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#ffffff",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#E7624f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/nurse/information/information",
+        "text": "信息发布",
+        "iconPath": "/static/images/信息发布——未选中.png",
+        "selectedIconPath": "/static/images/信息发布——选中.png"
+      },
+      {
+        "pagePath": "pages/nurse/community/community",
+        "text": "科普社区",
+        "iconPath": "/static/images/科普社区——未选中.png",
+        "selectedIconPath": "/static/images/科普社区——选中.png"
+      },
+      {
+        "pagePath": "pages/nurse/profile/profile",
+        "text": "个人主页",
+        "iconPath": "/static/images/我的——未选中.png",
+        "selectedIconPath": "/static/images/我的——选中.png"
+      }
+    ]
+  },
+  "usingComponents": {}
+}
