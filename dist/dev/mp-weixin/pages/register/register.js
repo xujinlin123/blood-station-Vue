@@ -1,8 +1,14 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
+<<<<<<< HEAD
   data() {
     return {
+=======
+  __name: "register",
+  setup(__props) {
+    const state = common_vendor.reactive({
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
       identityOptions: ["游客", "兼职护士", "献血者", "管理员", "研究所专家"],
       identityDict: { "兼职护士": "NURSE", "献血者": "DONOR", "管理员": "ADMIN", "研究所专家": "EXPERT" },
       selectedIdentity: "兼职护士",
@@ -14,6 +20,7 @@ const _sfc_main = {
       confirmPasswordVisible: false,
       showIdentityDropdown: false,
       dropdownStyle: ""
+<<<<<<< HEAD
     };
   },
   methods: {
@@ -45,6 +52,40 @@ const _sfc_main = {
       console.log("Toggle dropdown clicked");
       if (this.showIdentityDropdown) {
         this.showIdentityDropdown = false;
+=======
+    });
+    const {
+      identityOptions,
+      identityDict,
+      selectedIdentity,
+      phoneNumber,
+      password,
+      confirmPassword,
+      isAgreed,
+      passwordVisible,
+      confirmPasswordVisible,
+      showIdentityDropdown,
+      dropdownStyle
+    } = toRefs(state);
+    const onTapPage = () => {
+      if (showIdentityDropdown.value) {
+        console.log("Closing dropdown from page tap");
+        showIdentityDropdown.value = false;
+      }
+    };
+    const toggleConfirmPasswordVisibility = () => {
+      confirmPasswordVisible.value = !confirmPasswordVisible.value;
+    };
+    const selectIdentity = (index) => {
+      console.log("Selected identity:", identityOptions.value[index]);
+      selectedIdentity.value = identityOptions.value[index];
+      showIdentityDropdown.value = false;
+    };
+    const toggleIdentityDropdown = (e) => {
+      console.log("Toggle dropdown clicked");
+      if (showIdentityDropdown.value) {
+        showIdentityDropdown.value = false;
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
         return;
       }
       const query = common_vendor.index.createSelectorQuery();
@@ -52,6 +93,7 @@ const _sfc_main = {
       query.exec((res) => {
         if (res && res[0]) {
           const rect = res[0];
+<<<<<<< HEAD
           this.showIdentityDropdown = true;
           this.dropdownStyle = `top:${rect.bottom}px; left:${rect.left}px; width:${rect.width}px;`;
         } else {
@@ -103,6 +145,52 @@ const _sfc_main = {
         return;
       }
       if (!this.isAgreed) {
+=======
+          showIdentityDropdown.value = true;
+          dropdownStyle.value = `top:${rect.bottom}px; left:${rect.left}px; width:${rect.width}px;`;
+        } else {
+          showIdentityDropdown.value = true;
+        }
+      });
+    };
+    const onPhoneNumberInput = (e) => {
+      phoneNumber.value = e.detail.value;
+    };
+    const onPasswordInput = (e) => {
+      password.value = e.detail.value;
+    };
+    const onConfirmPasswordInput = (e) => {
+      confirmPassword.value = e.detail.value;
+    };
+    const onAgreementChange = (e) => {
+      isAgreed.value = !isAgreed.value;
+      console.log(isAgreed.value);
+    };
+    const navigateToUserService = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/user-service/user-service"
+      });
+    };
+    const navigateToPrivacyPolicy = () => {
+      common_vendor.index.navigateTo({
+        url: "/pages/privacy-policy/privacy-policy"
+      });
+    };
+    const onRegisterTap = () => {
+      if (phoneNumber.value === "") {
+        common_vendor.index.showToast({ title: "请输入要注册的手机号", icon: "none" });
+        return;
+      }
+      if (password.value === "") {
+        common_vendor.index.showToast({ title: "请输入要注册的密码", icon: "none" });
+        return;
+      }
+      if (password.value !== confirmPassword.value) {
+        common_vendor.index.showToast({ title: "两次输入的密码不一致", icon: "none" });
+        return;
+      }
+      if (!isAgreed.value) {
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
         common_vendor.index.showToast({ title: "请先同意用户协议", icon: "none" });
         return;
       }
@@ -113,11 +201,19 @@ const _sfc_main = {
         //请求方法
         //请求体
         data: {
+<<<<<<< HEAD
           phone: this.phoneNumber,
           password: this.password,
           confirmPassword: this.confirmPassword,
           role: this.identityDict[this.selectedIdentity],
           isAgreed: this.isAgreed
+=======
+          phone: phoneNumber.value,
+          password: password.value,
+          confirmPassword: confirmPassword.value,
+          role: identityDict.value[selectedIdentity.value],
+          isAgreed: isAgreed.value
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
         },
         header: { "Content-Type": "application/json" },
         success: (res) => {
@@ -140,6 +236,7 @@ const _sfc_main = {
           }
         }
       });
+<<<<<<< HEAD
     }
   },
   // 生命周期函数直接放到export default下
@@ -180,3 +277,45 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);
 wx.createPage(MiniProgramPage);
+=======
+    };
+    const stopPropagation = () => {
+    };
+    common_vendor.onLoad(() => {
+    });
+    common_vendor.onShow(() => {
+    });
+    return (_ctx, _cache) => {
+      return common_vendor.e({
+        a: common_vendor.t(common_vendor.unref(selectedIdentity)),
+        b: common_vendor.o(toggleIdentityDropdown),
+        c: common_vendor.o(onPhoneNumberInput),
+        d: common_vendor.unref(passwordVisible) ? "text" : "password",
+        e: common_vendor.o(onPasswordInput),
+        f: common_vendor.unref(confirmPasswordVisible) ? "text" : "password",
+        g: common_vendor.o(onConfirmPasswordInput),
+        h: common_vendor.unref(confirmPasswordVisible) ? "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/eye-open.jpg" : "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/eye-close.jpg",
+        i: common_vendor.o(toggleConfirmPasswordVisibility),
+        j: common_vendor.o(onAgreementChange),
+        k: common_vendor.o(navigateToUserService),
+        l: common_vendor.o(navigateToPrivacyPolicy),
+        m: common_vendor.o(onRegisterTap),
+        n: common_vendor.o(onTapPage),
+        o: common_vendor.unref(showIdentityDropdown)
+      }, common_vendor.unref(showIdentityDropdown) ? {
+        p: common_vendor.f(common_vendor.unref(identityOptions), (item, index, i0) => {
+          return {
+            a: common_vendor.t(item),
+            b: index,
+            c: index,
+            d: common_vendor.o(($event) => selectIdentity(index), index)
+          };
+        }),
+        q: common_vendor.s(common_vendor.unref(dropdownStyle)),
+        r: common_vendor.o(stopPropagation)
+      } : {});
+    };
+  }
+};
+wx.createPage(_sfc_main);
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)

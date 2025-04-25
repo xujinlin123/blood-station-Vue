@@ -76,392 +76,393 @@
   </view>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      identityOptions: ['游客','兼职护士', '献血者', '管理员', '研究所专家'],
-      identityDict: {'兼职护士':'NURSE','献血者':'DONOR','管理员':'ADMIN','研究所专家': 'EXPERT'},
-      selectedIdentity: '兼职护士',
-      selectedIdentityIndex: 0,
-      phoneNumber: '',
-      password: '',
-      isAgreed: false,
-      showIdentityDropdown: false,
-      passwordVisible: false,
-      dropdownStyle: ''
-    }
-  },
-  
-  methods: {
-    togglePasswordVisibility() {
-      this.passwordVisible = !this.passwordVisible;
-    },
-    
-    toggleIdentityDropdown(e) {
-      if (this.showIdentityDropdown) {
-        this.showIdentityDropdown = false;
-        return;
-      }
+<script  setup>
+import { ref } from 'vue'
 
-      const query = uni.createSelectorQuery();
-      query.select('.picker-selected').boundingClientRect();
-      query.exec((res) => {
-        if (res && res[0]) {
-          const rect = res[0];
-          this.showIdentityDropdown = true;
-          this.dropdownStyle = `top:${rect.bottom}px; left:${rect.left}px; width:${rect.width}px;`;
-        } else {
-          this.showIdentityDropdown = true;
-        }
-      });
-    },
+// 响应式数据
+const identityOptions = ref(['游客','兼职护士', '献血者', '管理员', '研究所专家'])
+const identityDict = ref({
+  '兼职护士': 'NURSE',
+  '献血者': 'DONOR',
+  '管理员': 'ADMIN',
+  '研究所专家': 'EXPERT'
+})
+const selectedIdentity = ref('兼职护士')
+const selectedIdentityIndex = ref(0)
+const phoneNumber = ref('')
+const password = ref('')
+const isAgreed = ref(false)
+const showIdentityDropdown = ref(false)
+const passwordVisible = ref(false)
+const dropdownStyle = ref('')
 
-    selectIdentity(e) {
-      const index = e.currentTarget.dataset.index;
-      this.selectedIdentity = this.identityOptions[index];
-      this.showIdentityDropdown = false;
-    },
-    
-    onTapPage() {
-      if (this.showIdentityDropdown) {
-        this.showIdentityDropdown = false;
-      }
-    },
-    
-    onPhoneNumberInput(e) {
-      this.phoneNumber = e.detail.value;
-    },
-    
-    onPasswordInput(e) {
-      this.password = e.detail.value;
-    },
+// 方法定义
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value
+}
 
-    onAgreementChange(e) {
-      this.isAgreed = !this.isAgreed;
-    },
-
-    navigateToUserService() {
-      uni.navigateTo({
-        url: '/pages/user-service/user-service'
-      });
-    },
-
-    navigateToPrivacyPolicy() {
-      uni.navigateTo({
-        url: '/pages/privacy-policy/privacy-policy'
-      });
-    },
-    
-    navigateToRegister() {
-      uni.redirectTo({
-        url: '/pages/register/register'
-      });
-    },
-    
-    onLoginTap() {
-      if (!this.isAgreed) {
-        uni.showToast({
-          title: '请先同意用户服务协议和隐私协议',
-          icon: 'none'
-        });
-        return;
-      }
-    
-      if (!this.phoneNumber || !this.password) {
-        uni.showToast({
-          title: '手机号或密码不能为空',
-          icon: 'none'
-        });
-        return;
-      }
-    
-      uni.request({
-        url: 'https://jobguard.online/api/auth/login',
-        method: 'POST',
-        header: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          phone: this.phoneNumber,
-          password: this.password,
-          role: this.identityDict[this.selectedIdentity],
-          isAgreed: this.isAgreed 
-        },
-        success: (res) => {
-          if (res.data.message=="success") {
-            uni.showToast({
-              title: '正在登录',
-              icon: 'success',
-              duration: 500,
-            });
-            setTimeout(() => {
-              uni.setStorage({
-                key: 'userIdentity',
-                data: {
-                  "Identity": this.selectedIdentity,
-                  "token": res.data.data.token
-                },
-                success: () => {
-                  console.log('存储用户身份信息成功');
-                }
-              });
-              uni.switchTab({
-                url: '/pages/nurse/information/information'
-              });
-            }, 500);
-          } else {
-            uni.showToast({
-              title: res.data.message || '账号或密码错误',
-              icon: 'none'
-            });
-          }
-        },
-        fail: (err) => {
-          uni.showToast({
-            title: '网络错误，请稍后重试',
-            icon: 'none'
-          });
-        }
-      });
-    },
+const toggleIdentityDropdown = (e) => {
+  if (showIdentityDropdown.value) {
+    showIdentityDropdown.value = false
+    return
   }
+
+  const query = uni.createSelectorQuery()
+  query.select('.picker-selected').boundingClientRect()
+  query.exec((res) => {
+    if (res && res[0]) {
+      const rect = res[0]
+      showIdentityDropdown.value = true
+      dropdownStyle.value = `top:${rect.bottom}px; left:${rect.left}px; width:${rect.width}px;`
+    } else {
+      showIdentityDropdown.value = true
+    }
+  })
+}
+
+const selectIdentity = (e) => {
+  const index = e.currentTarget.dataset.index
+  selectedIdentity.value = identityOptions.value[index]
+  showIdentityDropdown.value = false
+}
+
+const onTapPage = () => {
+  if (showIdentityDropdown.value) {
+    showIdentityDropdown.value = false
+  }
+}
+
+const onPhoneNumberInput = (e) => {
+  phoneNumber.value = e.detail.value
+}
+
+const onPasswordInput = (e) => {
+  password.value = e.detail.value
+}
+
+const onAgreementChange = (e) => {
+  isAgreed.value = !isAgreed.value
+}
+
+const navigateToUserService = () => {
+  uni.navigateTo({
+    url: '/pages/user-service/user-service'
+  })
+}
+
+const navigateToPrivacyPolicy = () => {
+  uni.navigateTo({
+    url: '/pages/privacy-policy/privacy-policy'
+  })
+}
+
+const navigateToRegister = () => {
+  uni.redirectTo({
+    url: '/pages/register/register'
+  })
+}
+
+const onLoginTap = () => {
+  if (!isAgreed.value) {
+    uni.showToast({
+      title: '请先同意用户服务协议和隐私协议',
+      icon: 'none'
+    })
+    return
+  }
+  
+  if (!phoneNumber.value || !password.value) {
+    uni.showToast({
+      title: '手机号或密码不能为空',
+      icon: 'none'
+    })
+    return
+  }
+  
+  uni.request({
+    url: 'https://jobguard.online/api/auth/login',
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json'
+    },
+    data: {
+      phone: phoneNumber.value,
+      password: password.value,
+      role: identityDict.value[selectedIdentity.value],
+      isAgreed: isAgreed.value 
+    },
+    success: (res) => {
+      if (res.data.message == "success") {
+        uni.showToast({
+          title: '正在登录',
+          icon: 'success',
+          duration: 500,
+        })
+        setTimeout(() => {
+          uni.setStorage({
+            key: 'userIdentity',
+            data: {
+              "Identity": selectedIdentity.value,
+              "token": res.data.data.token
+            },
+            success: () => {
+              console.log('存储用户身份信息成功')
+            }
+          })
+          uni.switchTab({
+            url: '/pages/nurse/information/information'
+          })
+        }, 500)
+      } else {
+        uni.showToast({
+          title: res.data.message || '账号或密码错误',
+          icon: 'none'
+        })
+      }
+    },
+    fail: (err) => {
+      uni.showToast({
+        title: '网络错误，请稍后重试',
+        icon: 'none'
+      })
+    }
+  })
 }
 </script>
 
 <style>
 page {
-  height: 100%;
-  overflow: hidden;
-}
+    height: 100%;
+    overflow: hidden;
+  }
+    
+  .page-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
   
-.page-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-.page-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -2;
-}
+  .page-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+  }
+    
+  .content-area {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40rpx; 
+    box-sizing: border-box;
+  }
+    
+  .platform-title {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    padding: 20rpx 0;
+    margin-bottom: 10rpx;
+    z-index: 1;
+  }
+    
+  .container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 92%;
+    height: 90%;
+    background-color: white;
+    border-radius: 20px;
+    padding: 20rpx 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+    
+  .header {
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+    
+  .title-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+    
+  .title-bg {
+    width: 100%;
+    height: 250rpx;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+  }
+    
+  .title {
+    position: relative;
+    color: #333;
+    font-size: 22px;
+    white-space: nowrap;
+    z-index: 1;
+    padding: 0 20rpx;
+  }
+    
+  .form {
+    position: relative;
+    width: 80%;
+    margin-bottom: 20px;
+  }
+    
+  .input-container {
+    display: flex;
+    border: 1px solid #ff6f61;
+    height: 80rpx;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    overflow: hidden;
+  }
   
-.content-area {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-top: 40rpx; 
-  box-sizing: border-box;
-}
+  .toggle-password {
+    width: 70rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10rpx;
+  }
   
-.platform-title {
-  width: 100%;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  padding: 20rpx 0;
-  margin-bottom: 10rpx;
-  z-index: 1;
-}
-  
-.container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 92%;
-  height: 90%;
-  background-color: white;
-  border-radius: 20px;
-  padding: 20rpx 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1;
-}
-  
-.header {
-  margin-top: 40px;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 30px;
-}
-  
-.title-container {
-  position: relative;
-  display: inline-block;
-  text-align: center;
-  margin-bottom: 20px;
-}
-  
-.title-bg {
-  width: 100%;
-  height: 250rpx;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 0;
-}
-  
-.title {
-  position: relative;
-  color: #333;
-  font-size: 22px;
-  white-space: nowrap;
-  z-index: 1;
-  padding: 0 20rpx;
-}
-  
-.form {
-  position: relative;
-  width: 80%;
-  margin-bottom: 20px;
-}
-  
-.input-container {
-  display: flex;
-  border: 1px solid #ff6f61;
-  height: 80rpx;
-  border-radius: 30px;
-  margin-bottom: 25px;
-  overflow: hidden;
-}
-
-.toggle-password {
-  width: 70rpx;
-  height: 80rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10rpx;
-}
-
-.password-icon {
-  width: 35rpx;
-  height: 35rpx;
-}
- 
-.custom-picker {
-  position: relative;
-  flex: 1;
-  height: 100%;
-}
-  
-.picker-selected {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  height: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 28rpx;
-}
-  
-.dropdown-arrow {
-  color: #999;
-  font-size: 24rpx;
-  transition: transform 0.3s;
-}
-  
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 999;
-  max-height: 300rpx;
-  overflow-y: auto;
-}
-  
-.dropdown-item {
-  padding: 10px;
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
-  font-size: 28rpx;
-}
-  
-.dropdown-item:last-child {
-  border-bottom: none;
-}
-  
-.dropdown-item-hover {
-  background-color: #f5f5f5;
-}
-  
-.input-label {
-  color: #fff;
-  padding: 10px 15px;
-  width: 100rpx;
-  text-align: center;
-  background-color: #ff6f61;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  font-weight: 600;
-  font-size: 28rpx;
-}
-  
-.input-field {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  font-size: 28rpx;
-}
-  
-.agreement {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  font-size: 24rpx;
-  color: #666;
-}
-  
-.protocol-link {
-  color: #003399;
-}
-  
-.checkbox {
-  transform: scale(0.8);
-  margin-right: 6rpx;
-}
-  
-.login-btn {
-  margin-bottom: 30px;
-  text-align: center;
-}
-  
-.bt { 
-  margin: 0 auto;
-  width: 240rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 40rpx;
-  background-color: #ff6f61;
-  color: white;
-  font-size: 32rpx;
-}
-  
-.footer {
-  margin-top: 10px;
-}
-  
-.link {
-  font-size: 26rpx;
-  color: #007aff;
-}
+  .password-icon {
+    width: 35rpx;
+    height: 35rpx;
+  }
+   
+  .custom-picker {
+    position: relative;
+    flex: 1;
+    height: 100%;
+  }
+    
+  .picker-selected {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 28rpx;
+  }
+    
+  .dropdown-arrow {
+    color: #999;
+    font-size: 24rpx;
+    transition: transform 0.3s;
+  }
+    
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    max-height: 300rpx;
+    overflow-y: auto;
+  }
+    
+  .dropdown-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s ease;
+    font-size: 28rpx;
+  }
+    
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+    
+  .dropdown-item-hover {
+    background-color: #f5f5f5;
+  }
+    
+  .input-label {
+    color: #fff;
+    padding: 10px 15px;
+    width: 100rpx;
+    text-align: center;
+    background-color: #ff6f61;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 28rpx;
+  }
+    
+  .input-field {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    font-size: 28rpx;
+  }
+    
+  .agreement {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    font-size: 24rpx;
+    color: #666;
+  }
+    
+  .protocol-link {
+    color: #003399;
+  }
+    
+  .checkbox {
+    transform: scale(0.8);
+    margin-right: 6rpx;
+  }
+    
+  .login-btn {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+    
+  .bt { 
+    margin: 0 auto;
+    width: 240rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    border-radius: 40rpx;
+    background-color: #ff6f61;
+    color: white;
+    font-size: 32rpx;
+  }
+    
+  .footer {
+    margin-top: 10px;
+  }
+    
+  .link {
+    font-size: 26rpx;
+    color: #007aff;
+  }
 </style>

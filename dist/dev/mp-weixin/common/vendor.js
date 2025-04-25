@@ -1,4 +1,5 @@
 "use strict";
+<<<<<<< HEAD
 const _export_sfc = (sfc, props) => {
   const target = sfc.__vccOpts || sfc;
   for (const [key, val] of props) {
@@ -6,6 +7,8 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
 /**
 * @vue/shared v3.4.21
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
@@ -765,8 +768,13 @@ function promisify$1(name, fn) {
     if (hasCallback(args)) {
       return wrapperReturnValue(name, invokeApi(name, fn, args, rest));
     }
+<<<<<<< HEAD
     return wrapperReturnValue(name, handlePromise(new Promise((resolve2, reject) => {
       invokeApi(name, fn, extend(args, { success: resolve2, fail: reject }), rest);
+=======
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, fn, extend(args, { success: resolve, fail: reject }), rest);
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
     })));
   };
 }
@@ -1081,7 +1089,11 @@ function invokeGetPushCidCallbacks(cid2, errMsg) {
   getPushCidCallbacks.length = 0;
 }
 const API_GET_PUSH_CLIENT_ID = "getPushClientId";
+<<<<<<< HEAD
 const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve: resolve2, reject }) => {
+=======
+const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, reject }) => {
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
   Promise.resolve().then(() => {
     if (typeof enabled === "undefined") {
       enabled = false;
@@ -1090,7 +1102,11 @@ const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve: re
     }
     getPushCidCallbacks.push((cid2, errMsg) => {
       if (cid2) {
+<<<<<<< HEAD
         resolve2({ cid: cid2 });
+=======
+        resolve({ cid: cid2 });
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
       } else {
         reject(errMsg);
       }
@@ -1159,9 +1175,15 @@ function promisify(name, api) {
     if (isFunction(options.success) || isFunction(options.fail) || isFunction(options.complete)) {
       return wrapperReturnValue(name, invokeApi(name, api, options, rest));
     }
+<<<<<<< HEAD
     return wrapperReturnValue(name, handlePromise(new Promise((resolve2, reject) => {
       invokeApi(name, api, extend({}, options, {
         success: resolve2,
+=======
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, api, extend({}, options, {
+        success: resolve,
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
         fail: reject
       }), rest);
     })));
@@ -3408,6 +3430,7 @@ function setCurrentRenderingInstance(instance) {
   instance && instance.type.__scopeId || null;
   return prev;
 }
+<<<<<<< HEAD
 const COMPONENTS = "components";
 function resolveComponent(name, maybeSelfReference) {
   return resolveAsset(COMPONENTS, name, true, maybeSelfReference) || name;
@@ -3449,6 +3472,8 @@ If this is a native custom element, make sure to exclude it from component resol
 function resolve(registry, name) {
   return registry && (registry[name] || registry[camelize(name)] || registry[capitalize(camelize(name))]);
 }
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
 const INITIAL_WATCHER_VALUE = {};
 function watch(source, cb, options) {
   if (!isFunction(cb)) {
@@ -3925,6 +3950,7 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     );
   }
 }
+<<<<<<< HEAD
 const createHook = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
@@ -3940,6 +3966,23 @@ const onRenderTriggered = createHook(
   "rtg"
 );
 const onRenderTracked = createHook(
+=======
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
+  // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
+  (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
+);
+const onBeforeMount = createHook$1("bm");
+const onMounted = createHook$1("m");
+const onBeforeUpdate = createHook$1("bu");
+const onUpdated = createHook$1("u");
+const onBeforeUnmount = createHook$1("bum");
+const onUnmounted = createHook$1("um");
+const onServerPrefetch = createHook$1("sp");
+const onRenderTriggered = createHook$1(
+  "rtg"
+);
+const onRenderTracked = createHook$1(
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
   "rtc"
 );
 function onErrorCaptured(hook, target = currentInstance) {
@@ -7353,13 +7396,32 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createPluginApp = global.createPluginApp = createPluginApp;
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
+<<<<<<< HEAD
 exports._export_sfc = _export_sfc;
+=======
+const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
+  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
+};
+const onShow = /* @__PURE__ */ createHook(ON_SHOW);
+const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
 exports.createSSRApp = createSSRApp;
 exports.e = e;
 exports.f = f;
 exports.index = index;
 exports.n = n;
 exports.o = o;
+<<<<<<< HEAD
 exports.resolveComponent = resolveComponent;
 exports.s = s;
 exports.t = t;
+=======
+exports.onBeforeUnmount = onBeforeUnmount;
+exports.onLoad = onLoad;
+exports.onShow = onShow;
+exports.reactive = reactive;
+exports.ref = ref;
+exports.s = s;
+exports.t = t;
+exports.unref = unref;
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)

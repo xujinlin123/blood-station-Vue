@@ -342,248 +342,224 @@
   
   
 
-  <script>
-  export default {
-    data() {
-      return {
-        identitySelected: "兼职护士",  // 存储用户选择的身份
-        userName: "张医生",    // 默认用户名（张医生）
-        userId: "MD12345",     // 默认用户ID
-        userAvatar: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png",  // 默认头像图片路径
-        showNameDialog: false, // 控制修改姓名对话框的显示
-        newName: "",           // 存储临时输入的新姓名
-        userPhoto: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png",
-        hospital: '广东省中医院',
-        department: '检验科',
-        userID: '440xxxxxxxxxxxxxxx',
-        userGender: '女',
-        userCertNo: 'xxxx',
-        isPageReady: false,
-        userYear: '2024',
-        userBlood: 'Rh阴性',
-        Token: ''
-      }
-    },
-    
-    // 生命周期方法：页面加载时执行
-    onLoad(options) {
-      this.isPageReady = false; // 新增加载状态
+  <script setup>
+import { ref, onMounted } from 'vue'
+  import { onLoad, onShow } from '@dcloudio/uni-app'
   
-      uni.getStorage({
-        key: 'userIdentity',
-        success: (res) => {
-          this.identitySelected = res.data.Identity;
-          this.isPageReady = true; // 数据就绪后设置加载完成
-          this.Token = res.data.token;
-        },
-        fail: () => {
-          this.isPageReady = true; // 异常情况也允许渲染
-        }
-      });
-    },
-    
-    methods: {
-      // 自定义方法：加载用户数据
-      loadUserData() {
-        // 从同步存储中获取用户信息
-        const userInfo = uni.getStorageSync('userInfo');
-        if (userInfo) {       // 如果用户信息存在
-          this.userName = userInfo.name || this.userName; // 更新用户名或保留默认值
-          this.userId = userInfo.id || this.userId;      // 更新用户ID或保留默认值
-          this.userRole = userInfo.role || this.userRole; // 更新用户角色或保留默认值
-          this.userAvatar = userInfo.avatar || this.userAvatar; // 更新头像或保留默认值
-        }
-      },
-    
-      // 显示姓名编辑对话框
-      showNameEditDialog() {
-        this.showNameDialog = true;     // 显示对话框
-        this.newName = this.userName; // 将当前用户名设为初始值
-      },
-    
-      // 隐藏姓名编辑对话框
-      hideNameEditDialog() {
-        this.showNameDialog = false;     // 隐藏对话框
-      },
-    
-      // 处理姓名输入变化
-      onNameInput(e) {
-        this.newName = e.detail.value;   // 将用户输入的新值更新到newName
-      },
-    
-      // 确认修改姓名
-      confirmNameChange() {
-        if (this.newName.trim()) { // 检查新姓名是否为空
-          // 从存储中获取当前用户信息
-          let userInfo = uni.getStorageSync('userInfo') || {};
-          userInfo.name = this.newName; // 更新用户信息中的姓名
-          uni.setStorageSync('userInfo', userInfo); // 保存更新后的用户信息
-          console.log("token:"+this.Token);
-          uni.request({
-            url: 'https://jobguard.online/api/auth/modify-name', // 替换为你的后端 API 地址
-            method: 'POST', //请求方式
-            header: {
-              'Authorization': this.Token,
-              'Content-Type': 'application/json' //请求头格式为json
-            },
-            //请求体
-            data: {
-              name: this.newName
-            },
-            success: (res) => { //请求成功回调
-              console.log('后端返回:', res.data); //打印信息进行调试
-              if (res.data.message=="success") {
-                // 显示成功提示
-                uni.showToast({
-                  title: '名字修改成功', // "名字修改成功"
-                  icon: 'success'
-                });    
-              } else {
-                uni.showToast({
-                  title: res.data.message || '名字修改错误',
-                  icon: 'none'
-                });
-              }
-            },
-            //请求失败
-            fail: (err) => {
-              console.error('请求失败:', err);
-              uni.showToast({
-                title: '网络错误，请稍后重试',
-                icon: 'none'
-              });
-            }
-          });
+  // 响应式数据
+  const identitySelected = ref("兼职护士")
+  const userName = ref("张医生")
+  const userId = ref("MD12345")
+  const userAvatar = ref("https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png")
+  const showNameDialog = ref(false)
+  const newName = ref("")
+  const userPhoto = ref("https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png")
+  const hospital = ref('广东省中医院')
+  const department = ref('检验科')
+  const userID = ref('440xxxxxxxxxxxxxxx')
+  const userGender = ref('女')
+  const userCertNo = ref('xxxx')
+  const isPageReady = ref(false)
+  const userYear = ref('2024')
+  const userBlood = ref('Rh阴性')
+  const Token = ref('')
   
-          this.userName = this.newName; // 更新页面显示的用户名
-          this.showNameDialog = false;  // 隐藏对话框
-        } else { // 如果姓名为空
-          uni.showToast({
-            title: '名字不能为空', // "名字不能为空"
-            icon: 'error'
-          });
-        }
+  // 生命周期钩子
+  onLoad(() => {
+    isPageReady.value = false
+  
+    uni.getStorage({
+      key: 'userIdentity',
+      success: (res) => {
+        identitySelected.value = res.data.Identity
+        isPageReady.value = true
+        Token.value = res.data.token
       },
-    
-      // 阻止事件冒泡（防止事件向上传播）
-      preventBubble() {
-        return; // 空函数，用于阻止事件
-      },
-    
-      // 导航到"管理捐献者"页面
-      navigateToManageDonors() {
-        uni.navigateTo({
-          url: '/pages/manageDonors/manageDonors' // 目标页面路径
-        });
-      },
-    
-      // 导航到"审核申请"页面
-      navigateToReviewApplications() {
-        uni.navigateTo({
-          url: '/pages/reviewApplications/reviewApplications'
-        });
-      },
-    
-      // 导航到"黑名单"页面
-      navigateToBlacklist() {
-        uni.navigateTo({
-          url: '/pages/blacklist/blacklist'
-        });
-      },
-    
-      // 导航到"护士认证"页面
-      navigateToNurseCert() {
-        uni.navigateTo({
-          url: '/pages/nurseCert/nurseCert'
-        });
-      },
-    
-      // 导航到"捐献者认证"页面
-      navigateToDonorCert() {
-        uni.navigateTo({
-          url: '/pages/donorCert/donorCert'
-        });
-      },
-    
-      // 导航到"捐献记录"页面
-      navigateToDonationRecords() {
-        uni.navigateTo({
-          url: '/pages/donationRecords/donationRecords'
-        });
-      },
-    
-      // 导航到"消息"页面
-      navigateToMessages() {
-        uni.navigateTo({
-          url: '/pages/messages/messages'
-        });
-      },
-    
-      // 导航到"反馈"页面
-      navigateToFeedback() {
-        uni.navigateTo({
-          url: '/pages/feedback/feedback'
-        });
-      },
-    
-      // 退出登录功能
-      logout() {
-        uni.showModal({
-          title: '提示', // "提示"
-          content: '确定要退出登录吗？', // "确定要退出登录吗？"
-          success: (res) => { // 用户响应后的回调
-            if (res.confirm) { // 如果用户确认
-              // 清除存储的用户数据
-              uni.removeStorageSync('userInfo');
-              uni.removeStorageSync('token');
-              
-              // 重定向到登录页面
-              uni.reLaunch({
-                url: '/pages/login/login'
-              });
-            }
-          }
-        });
-      },
-    
-      // 检查更新
-      checkUpdate() {
-        uni.showLoading({
-          title: '检查更新中...' // "检查更新中..."
-        });
-        // 模拟检查更新，使用定时器
-        setTimeout(() => {
-          uni.hideLoading(); // 隐藏加载提示
-          
-          // 显示模拟结果
-          uni.showModal({
-            title: '版本更新', // "版本更新"
-            content: '当前已是最新版本 v1.0.5', // "当前已是最新版本 v1.0.5"
-            showCancel: false // 不显示取消按钮
-          });
-        }, 1500); // 延迟1.5秒
-      },
-      
-      // 开始更新（模拟）
-      startUpdate() {
-        uni.showLoading({
-          title: '更新中...' // "更新中..."
-        });
-        
-        // 模拟更新过程
-        setTimeout(() => {
-          uni.hideLoading(); // 隐藏加载提示
-          uni.showToast({
-            title: '更新成功', // "更新成功"
-            icon: 'success'
-          });
-        }, 2000); // 延迟2秒
+      fail: () => {
+        isPageReady.value = true
       }
+    })
+  })
+  
+  // 加载用户数据
+  const loadUserData = () => {
+    const userInfo = uni.getStorageSync('userInfo')
+    if (userInfo) {
+      userName.value = userInfo.name || userName.value
+      userId.value = userInfo.id || userId.value
+      userRole.value = userInfo.role || userRole.value
+      userAvatar.value = userInfo.avatar || userAvatar.value
     }
   }
-  </script>
+  
+  // 显示姓名编辑对话框
+  const showNameEditDialog = () => {
+    showNameDialog.value = true
+    newName.value = userName.value
+  }
+  
+  // 隐藏姓名编辑对话框
+  const hideNameEditDialog = () => {
+    showNameDialog.value = false
+  }
+  
+  // 处理姓名输入变化
+  const onNameInput = (e) => {
+    newName.value = e.detail.value
+  }
+  
+  // 确认修改姓名
+  const confirmNameChange = () => {
+    if (newName.value.trim()) {
+      let userInfo = uni.getStorageSync('userInfo') || {}
+      userInfo.name = newName.value
+      uni.setStorageSync('userInfo', userInfo)
+      
+      console.log("token:" + Token.value)
+      uni.request({
+        url: 'https://jobguard.online/api/auth/modify-name',
+        method: 'POST',
+        header: {
+          'Authorization': Token.value,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          name: newName.value
+        },
+        success: (res) => {
+          console.log('后端返回:', res.data)
+          if (res.data.message == "success") {
+            uni.showToast({
+              title: '名字修改成功',
+              icon: 'success'
+            })
+            userName.value = newName.value
+            showNameDialog.value = false
+          } else {
+            uni.showToast({
+              title: res.data.message || '名字修改错误',
+              icon: 'none'
+            })
+          }
+        },
+        fail: (err) => {
+          console.error('请求失败:', err)
+          uni.showToast({
+            title: '网络错误，请稍后重试',
+            icon: 'none'
+          })
+        }
+      })
+    } else {
+      uni.showToast({
+        title: '名字不能为空',
+        icon: 'error'
+      })
+    }
+  }
+  
+  // 导航方法
+  const navigateToManageDonors = () => {
+    uni.navigateTo({
+      url: '/pages/manageDonors/manageDonors'
+    })
+  }
+  
+  const navigateToReviewApplications = () => {
+    uni.navigateTo({
+      url: '/pages/reviewApplications/reviewApplications'
+    })
+  }
+  
+  const navigateToBlacklist = () => {
+    uni.navigateTo({
+      url: '/pages/blacklist/blacklist'
+    })
+  }
+  
+  const navigateToNurseCert = () => {
+    uni.navigateTo({
+      url: '/pages/nurseCert/nurseCert'
+    })
+  }
+  
+  const navigateToDonorCert = () => {
+    uni.navigateTo({
+      url: '/pages/donorCert/donorCert'
+    })
+  }
+  
+  const navigateToDonationRecords = () => {
+    uni.navigateTo({
+      url: '/pages/donationRecords/donationRecords'
+    })
+  }
+  
+  const navigateToMessages = () => {
+    uni.navigateTo({
+      url: '/pages/messages/messages'
+    })
+  }
+  
+  const navigateToFeedback = () => {
+    uni.navigateTo({
+      url: '/pages/feedback/feedback'
+    })
+  }
+  
+  // 退出登录
+  const logout = () => {
+    uni.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.removeStorageSync('userInfo')
+          uni.removeStorageSync('token')
+          uni.reLaunch({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+  }
+  
+  // 检查更新
+  const checkUpdate = () => {
+    uni.showLoading({
+      title: '检查更新中...'
+    })
+    setTimeout(() => {
+      uni.hideLoading()
+      uni.showModal({
+        title: '版本更新',
+        content: '当前已是最新版本 v1.0.5',
+        showCancel: false
+      })
+    }, 1500)
+  }
+  
+  // 开始更新
+  const startUpdate = () => {
+    uni.showLoading({
+      title: '更新中...'
+    })
+    setTimeout(() => {
+      uni.hideLoading()
+      uni.showToast({
+        title: '更新成功',
+        icon: 'success'
+      })
+    }, 2000)
+  }
+  
+  // 阻止事件冒泡
+  const preventBubble = () => {
+    return
+  }
+</script>
 
-<style>
+<style >
 /* pages/nurse/profile/profile.wxss */
 /* 页面基础样式 */
 page {
@@ -914,5 +890,4 @@ page {
     align-items: center; /* 垂直居中对齐 */
     font-size: 30rpx; /* 字体大小为30rpx */
 }
-
 </style>

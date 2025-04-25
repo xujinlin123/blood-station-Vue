@@ -301,65 +301,37 @@
   </template>
   
 
-  <script>
-//  import { MarkdownIt } from '../../../utils/markdown-it.js';
+<script setup>
+import { ref, onMounted } from 'vue'
+  import { onLoad, onShow } from '@dcloudio/uni-app'
+  // import { MarkdownIt } from '../../../utils/markdown-it.js'
   
-  export default {
-    data() {
-      return {
-        activeTab: 'science', // 默认的功能选择
-        sciencePosts: [
-          {
-            id: 1,
-            authorName: "张医生",
-            authorTitle: "血液科专家",
-            authorAvatar: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像.png", 
-            title: "Rh阴性血型知识全解析",
-            content: "Rh阴性血型在中国人群中的比例约为0.3%，属于稀有血型。这类献血者对医疗急救具有重要意义，特别是对于需要紧急输血的Rh阴性患者...",
-            likes: 128,
-            isLiked: false,
-            isFavorited: false
-          },
-          {
-            id: 2,
-            authorName: "李研究员",
-            authorTitle: "血液研究中心",
-            authorAvatar: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png", 
-            title: "了解稀有血型的重要性",
-            content: "稀有血型捐献者是医疗体系中的宝贵资源。A型RhD阴性、B型RhD阴性、AB型RhD阴性和O型RhD阴性血型的人群在中国占比很小，但这些血型对某些特定患者的治疗至关重要...",
-            likes: 85,
-            isLiked: false,
-            isFavorited: false
-          }
-        ],
-        qaHistory: [],//当前对话框中的对话内容
-        currentQuestion: "",//当前问题
-        historyList: [], //历史列表
-        showHistoryModal: false,//布尔变量用于控制列表框的显示和隐藏
-        showAttachmentModal: false,
-        currentChatId: null,   // 当前对话的ID
-        deleSessionId: null,   //要删除的对话ID
-        Token: "",
-        loading: false,
-        showAttachmentModal: false, // 控制附件弹窗显示
-        attachedImage: null,        // 选择的图片路径
-        attachedDoc: null,        // 文档附件（Word/PDF/Excel）
-        showPreviewModal: false,  // 控制图片放大预览弹窗显示
-        markdownRenderer: null    // 用于存储 markdown 渲染器实例
-      }
+  // 响应式数据
+  const activeTab = ref('science')
+  const sciencePosts = ref([
+    {
+      id: 1,
+      authorName: "张医生",
+      authorTitle: "血液科专家",
+      authorAvatar: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像.png", 
+      title: "Rh阴性血型知识全解析",
+      content: "Rh阴性血型在中国人群中的比例约为0.3%，属于稀有血型。这类献血者对医疗急救具有重要意义，特别是对于需要紧急输血的Rh阴性患者...",
+      likes: 128,
+      isLiked: false,
+      isFavorited: false
     },
-    
-    onLoad() {
-      uni.getStorage({
-        key: 'userIdentity',
-        success: (res) => {
-          this.Token = res.data.token;
-        }
-      });
-      
-      // 初始化 markdown 渲染器
-      this.markdownRenderer = new MarkdownIt();
+    {
+      id: 2,
+      authorName: "李研究员",
+      authorTitle: "血液研究中心",
+      authorAvatar: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png", 
+      title: "了解稀有血型的重要性",
+      content: "稀有血型捐献者是医疗体系中的宝贵资源。A型RhD阴性、B型RhD阴性、AB型RhD阴性和O型RhD阴性血型的人群在中国占比很小，但这些血型对某些特定患者的治疗至关重要...",
+      likes: 85,
+      isLiked: false,
+      isFavorited: false
     },
+<<<<<<< HEAD
 
     onShow() {
     // 从本地存储读取参数
@@ -908,12 +880,540 @@
             }
           }
         });
+=======
+    {
+      id: 3,
+      authorName: "刘护士",
+      authorTitle: "血液站工作人员",
+      authorAvatar: "https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png", 
+      title: "O型血的稀有性",
+      content: "O型血是最常见的血型，但O型Rh阴性血型在中国人群中非常稀有。了解O型Rh阴性血型的特点和献血需求，有助于提高公众对献血的认识...",
+      likes: 74,
+      isLiked: false,
+      isFavorited: false
+    }
+  ])
+  const qaHistory = ref([])
+  const currentQuestion = ref("")
+  const historyList = ref([])
+  const showHistoryModal = ref(false)
+  const showAttachmentModal = ref(false)
+  const currentChatId = ref(null)
+  const deleSessionId = ref(null)
+  const Token = ref("")
+  const loading = ref(false)
+  const attachedImage = ref(null)
+  const attachedDoc = ref(null)
+  const showPreviewModal = ref(false)
+  const markdownRenderer = ref(null)
+  
+  // 生命周期钩子
+  onLoad(() => {
+    uni.getStorage({
+      key: 'userIdentity',
+      success: (res) => {
+        Token.value = res.data.token
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
       }
+    })
+    
+    // 初始化 markdown 渲染器
+    // markdownRenderer.value = new MarkdownIt()
+  })
+  
+  onShow(() => {
+    const selectedTab = uni.getStorageSync('SELECTED_TAB')
+    
+    if (selectedTab) {
+      activeTab.value = selectedTab
+      loadChatHistory()
+      newChat()
+      uni.removeStorageSync('SELECTED_TAB')
+    }
+  })
+  
+  // 方法定义
+  const switchTab = (e) => {
+    const tab = e.currentTarget.dataset.tab
+    activeTab.value = tab
+    loadChatHistory()
+    newChat()
+  }
+  
+  const toggleLike = (e) => {
+    const postId = e.currentTarget.dataset.id
+    const postIndex = sciencePosts.value.findIndex(post => post.id === postId)
+    
+    if (postIndex !== -1) {
+      const isLiked = sciencePosts.value[postIndex].isLiked
+      sciencePosts.value[postIndex].isLiked = !isLiked
+      sciencePosts.value[postIndex].likes = isLiked ? sciencePosts.value[postIndex].likes - 1 : sciencePosts.value[postIndex].likes + 1
     }
   }
-</script>
+  
+  const toggleFavorite = (e) => {
+    const postId = e.currentTarget.dataset.id
+    const postIndex = sciencePosts.value.findIndex(post => post.id === postId)
+    console.log("准备收藏")
+    
+    if (postIndex !== -1) {
+      sciencePosts.value[postIndex].isFavorited = !sciencePosts.value[postIndex].isFavorited
+    }
+  }
+  
+  const inputQuestion = (e) => {
+    currentQuestion.value = e.detail.value
+  }
+  
+  const removeAttachedImage = () => {
+    attachedImage.value = null
+  }
+  
+  const removeAttachedDoc = () => {
+    attachedDoc.value = null
+  }
+  
+  const openPreview = () => {
+    showPreviewModal.value = true
+  }
+  
+  const closePreview = () => {
+    showPreviewModal.value = false
+  }
+  
+  const chooseImage = () => {
+    uni.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album'],
+      success: (res) => {
+        attachedImage.value = res.tempFilePaths[0]
+        showAttachmentModal.value = false
+      },
+      fail: (err) => {
+        console.error('选择图片失败：', err)
+        showAttachmentModal.value = false
+      }
+    })
+  }
+  
+  const chooseWord = () => {
+    uni.chooseFile({
+      count: 1,
+      type: 'file',
+      extension: ['doc', 'docx'],
+      success: (res) => {
+        const file = res.tempFiles[0]
+        attachedDoc.value = {
+          type: 'word',
+          path: file.path,
+          name: file.name || 'Word文档'
+        }
+        showAttachmentModal.value = false
+      },
+      fail: (err) => {
+        console.error('选择Word文档失败：', err)
+        showAttachmentModal.value = false
+      }
+    })
+  }
+  
+  const choosePdf = () => {
+    uni.chooseFile({
+      count: 1,
+      type: 'file',
+      extension: ['pdf'],
+      success: (res) => {
+        const file = res.tempFiles[0]
+        attachedDoc.value = {
+          type: 'pdf',
+          path: file.path,
+          name: file.name || 'PDF文档'
+        }
+        showAttachmentModal.value = false
+      },
+      fail: (err) => {
+        console.error('选择PDF文档失败：', err)
+        showAttachmentModal.value = false
+      }
+    })
+  }
+  
+  const chooseExcel = () => {
+    uni.chooseFile({
+      count: 1,
+      type: 'file',
+      extension: ['xls', 'xlsx'],
+      success: (res) => {
+        const file = res.tempFiles[0]
+        attachedDoc.value = {
+          type: 'excel',
+          path: file.path,
+          name: file.name || 'Excel表格'
+        }
+        showAttachmentModal.value = false
+      },
+      fail: (err) => {
+        console.error('选择Excel表格失败：', err)
+        showAttachmentModal.value = false
+      }
+    })
+  }
+  
+  const sendQuestion = () => {
+    let question = currentQuestion.value.trim()
+    const hasImage = attachedImage.value
+    const hasDoc = attachedDoc.value
+    
+    if ((hasImage || hasDoc) && !question) {
+      question = "附件内容是什么？"
+    }
+    if (!question && !hasImage && !hasDoc) {
+      return
+    }
+    
+    // 添加用户问题记录
+    qaHistory.value.push({
+      role: 'user',
+      content: question,
+      attachment: hasImage
+        ? { type: 'image', path: attachedImage.value }
+        : hasDoc
+          ? { 
+              type: attachedDoc.value.type, 
+              path: attachedDoc.value.path, 
+              name: attachedDoc.value.name 
+            }
+          : null
+    })
+    
+    // 清空输入和附件
+    currentQuestion.value = ""
+    attachedImage.value = null
+    attachedDoc.value = null
+    
+    saveChatHistory()
+    
+    // 添加空的 AI 回复
+    const aiReply = { role: 'ai', content: '', htmlContent: '' }
+    qaHistory.value.push(aiReply)
+    loading.value = true
+    
+    // 处理图片附件
+    if (hasImage) {
+      uni.getFileSystemManager().readFile({
+        filePath: attachedImage.value,
+        encoding: 'base64',
+        success: (res) => {
+          const base64Image = res.data
+          const payload = {
+            model: "glm-4v",
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  { type: 'image_url', image_url: { url: base64Image } },
+                  { type: 'text', text: question + " 字数限定于200字" }
+                ]
+              }
+            ]
+          }
+          uni.request({
+            url: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+            method: 'POST',
+            header: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer bd62dc89ee6a1c34f3c72dfac96f58a5.2GA3Q4wOK7GUaC7f'  
+            },
+            data: JSON.stringify(payload),
+            success: (res) => {
+              processAiResponse(res.data, aiReply)
+            },
+            fail: (err) => {
+              console.error('图片处理请求错误:', err)
+              loading.value = false
+            }
+          })
+        },
+        fail: (err) => {
+          console.error("读取图片失败:", err)
+          loading.value = false
+        }
+      })
+    } 
+    // 处理文档附件
+    else if (hasDoc) {
+      console.log("已成功读取附件/word/pdf/excel")
+      
+      const mimeMapping = {
+        word: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        pdf: "application/pdf",
+        excel: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+      }
+      
+      uni.getFileSystemManager().readFile({
+        filePath: attachedDoc.value.path,
+        encoding: 'base64',
+        success: (res) => {
+          console.log("成功将文档转换为Base64")
+          const base64Doc = res.data
+          const mimeType = mimeMapping[attachedDoc.value.type] || "application/octet-stream"
+          const dataUrl = "data:" + mimeType + ";base64," + base64Doc
+          const payload = {
+            model: "glm-4",
+            messages: [
+              {
+                role: 'user',
+                content: [
+                  {
+                    type: 'file',
+                    file_url: {
+                      url: dataUrl
+                    }
+                  },
+                  { type: 'text', text: question + " 最长回答限定于350字" }
+                ]
+              }
+            ]
+          }
+          uni.request({
+            url: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+            method: 'POST',
+            header: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer bd62dc89ee6a1c34f3c72dfac96f58a5.2GA3Q4wOK7GUaC7f'  
+            },
+            data: JSON.stringify(payload),
+            success: (res) => {
+              console.log("打印文档请求结果")
+              console.log(res.data)
+              processAiResponse(res.data, aiReply)
+            },
+            fail: (error) => {
+              console.error('请求错误:', error)
+              loading.value = false
+            }
+          })
+        },
+        fail: (err) => {
+          console.error("读取文档失败:", err)
+          loading.value = false
+        }
+      })
+    } 
+    // 纯文本请求
+    else {
+      uni.request({
+        url: 'https://jobguard.online/api/ai/stream-chat',
+        method: 'POST',
+        header: {
+          'Authorization': Token.value,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify({ 
+          input: question + "最长回答限定于350字", 
+          sessionId: currentChatId.value 
+        }),
+        success: (res) => {
+          if (res.data) {
+            processAiResponse(res.data, aiReply)
+          }
+        },
+        fail: (error) => {
+          console.error('请求错误:', error)
+          loading.value = false
+        }
+      })
+    }
+  }
+  
+  const processAiResponse = (responseData, aiReply) => {
+    let text = ""
+    if (typeof responseData === "string") {
+      text = responseData
+    } else if (typeof responseData === "object") {
+      if (
+        responseData.choices &&
+        responseData.choices[0] &&
+        responseData.choices[0].message &&
+        responseData.choices[0].message.content
+      ) {
+        text = responseData.choices[0].message.content
+      } else {
+        text = JSON.stringify(responseData)
+      }
+    }
+    
+    const lines = text.split('\n')
+    const processedContent = lines
+      .map(line => line.replace(/^data:/, '').trim())
+      .filter(line => line.length > 0)
+      .join('')
+    
+    let currentText = ''
+    const typeText = (text, index = 0) => {
+      if (index < text.length) {
+        currentText += text[index]
+        aiReply.content = currentText
+        scrollToBottom()
+        setTimeout(() => typeText(text, index + 1), 10)
+      } else {
+        // 使用 markdown 渲染器
+        // aiReply.htmlContent = markdownRenderer.value.render(currentText)
+        loading.value = false
+        saveChatHistory()
+      }
+    }
+    typeText(processedContent)
+  }
 
-<style>
+  const scrollTop = ref(0)
+  
+  const scrollToBottom = () => {
+    uni.createSelectorQuery()
+      .select('.qa-history')
+      .boundingClientRect(rect => {
+        if (rect) {
+          scrollTop.value = rect.height
+        }
+      })
+      .exec()
+  }
+  
+  const newChat = () => {
+    if (qaHistory.value.length > 0) {
+      saveChatHistory()
+    }
+    
+    uni.request({
+      url: 'https://jobguard.online/api/ai/create-session',
+      method: 'POST',
+      header: {
+        'Authorization': Token.value,
+        'Content-Type': 'application/json'
+      },
+      success: (res) => {
+        console.log("打印创建新对话框res.data")
+        console.log(res.data)
+        if (res.data) {
+          qaHistory.value = []
+          currentChatId.value = res.data.data
+          console.log("currentChatId")
+          console.log(currentChatId.value)
+        }
+      },
+      fail: (err) => {
+        console.error('创建新会话失败:', err)
+      }
+    })
+  }
+  
+  const saveChatHistory = () => {
+    if (qaHistory.value.length === 0) return
+    
+    const chatHistory = uni.getStorageSync('chatHistory') || []
+    const existingIndex = chatHistory.findIndex(item => item.id === currentChatId.value)
+    
+    const firstQuestion = qaHistory.value.find(msg => msg.role === 'user')?.content || ''
+    const title = firstQuestion.length > 5 ? firstQuestion.substring(0, 5) + '...' : firstQuestion
+    
+    const chatData = {
+      id: currentChatId.value,
+      title: title,
+      date: formatDate(new Date()),
+      messages: qaHistory.value,
+      timestamp: Date.now()
+    }
+    
+    if (existingIndex !== -1) {
+      chatHistory[existingIndex] = chatData
+    } else {
+      chatHistory.unshift(chatData)
+    }
+    
+    uni.setStorageSync('chatHistory', chatHistory)
+    loadChatHistory()
+  }
+  
+  const loadChatHistory = () => {
+    historyList.value = uni.getStorageSync('chatHistory') || []
+  }
+  
+  const viewHistory = () => {
+    loadChatHistory()
+    showHistoryModal.value = true
+  }
+  
+  const closeHistory = () => {
+    showHistoryModal.value = false
+  }
+  
+  const loadHistoryChat = (e) => {
+    const chatId = e.currentTarget.dataset.id
+    const chatHistory = uni.getStorageSync('chatHistory') || []
+    const chat = chatHistory.find(item => item.id === chatId)
+    
+    if (chat) {
+      qaHistory.value = chat.messages
+      currentChatId.value = chatId
+      showHistoryModal.value = false
+      nextTick(() => {
+        scrollToBottom()
+      })
+    }
+  }
+  
+  const addAttachment = () => {
+    showAttachmentModal.value = true
+  }
+  
+  const closeAttachmentModal = () => {
+    showAttachmentModal.value = false
+  }
+  
+  const formatDate = (date) => {
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const day = date.getDate().toString().padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+  
+  const deleteHistoryItem = (e) => {
+    e.stopPropagation && e.stopPropagation()
+    const chatId = e.currentTarget.dataset.id
+    
+    uni.showModal({
+      title: '提示',
+      content: '是否确定删除该对话？',
+      success: (res) => {
+        if (res.confirm) {
+          let chatHistory = uni.getStorageSync('chatHistory') || []
+          chatHistory = chatHistory.filter(item => item.id !== chatId)
+          uni.setStorageSync('chatHistory', chatHistory)
+          historyList.value = chatHistory
+          
+          console.log("点击后的对话项ID")
+          console.log(chatId)
+          uni.request({
+            url: `https://jobguard.online/api/ai/delete-session?sessionId=${chatId}`,
+            method: 'POST',
+            header: {
+              'Authorization': Token.value,
+              'Content-Type': 'application/json'
+            },
+            success: (res) => {
+              console.log('删除对话成功:', res)
+            },
+            fail: (err) => {
+              console.error('删除对话请求失败:', err)
+            }
+          })
+        }
+      }
+    })
+  }
+</script>
+<style >
 /* 页面基础样式，确保页面占满全高并防止滚动条出现 */
 page {
     height: 100%;
@@ -1514,5 +2014,4 @@ page {
     width: 50rpx;
     height: 50rpx;
 }
-
 </style>

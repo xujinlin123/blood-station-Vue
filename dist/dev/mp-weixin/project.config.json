@@ -19,7 +19,11 @@
   },
   "compileType": "miniprogram",
   "libVersion": "3.8.0",
+<<<<<<< HEAD
   "appid": "wxece86ef6652d9a6f",
+=======
+  "appid": "touristappid",
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
   "projectname": "",
   "condition": {
     "search": {

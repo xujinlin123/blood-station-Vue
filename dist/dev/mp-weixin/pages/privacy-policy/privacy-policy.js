@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const _sfc_main = {
+<<<<<<< HEAD
   data() {
     return {
       // Original empty data object
@@ -34,3 +35,24 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);
 wx.createPage(MiniProgramPage);
+=======
+  __name: "privacy-policy",
+  setup(__props) {
+    const goBack = () => {
+      common_vendor.index.navigateBack({
+        delta: 1
+      });
+    };
+    common_vendor.onLoad(() => {
+    });
+    common_vendor.onShow(() => {
+    });
+    return (_ctx, _cache) => {
+      return {
+        a: common_vendor.o(goBack)
+      };
+    };
+  }
+};
+wx.createPage(_sfc_main);
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
