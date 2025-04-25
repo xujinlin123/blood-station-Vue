@@ -52,12 +52,17 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-4050720250324001",
     "@dcloudio/uni-mp-xhs": "3.0.0-4050720250324001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-4050720250324001",
+<<<<<<< HEAD
     "deep-pick-omit": "^1.2.1",
     "destr": "^2.0.5",
     "markdown-it": "^14.1.0",
     "pinia": "^3.0.2",
     "pinia-plugin-persistedstate": "^4.2.0",
     "sass": "^1.87.0",
+=======
+    "echarts": "^5.6.0",
+    "markdown-it": "^14.1.0",
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     "vue": "^3.4.21",
     "vue-i18n": "^9.1.9"
   },

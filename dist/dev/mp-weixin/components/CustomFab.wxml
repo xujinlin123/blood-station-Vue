@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 <view><view class="{{['fab', a && 'collapsed']}}" bindtouchstart="{{b}}" bindtouchmove="{{c}}" bindtap="{{d}}" animation="{{e}}"><ai-avatar u-i="d69f26f8-0" bind:__l="__l"/></view><view wx:if="{{f}}" class="menu-container" animation="{{h}}" catchtouchmove="{{i}}"><view wx:for="{{g}}" wx:for-item="item" wx:key="b" class="menu-item" animation="{{item.c}}" bindtap="{{item.d}}"><text class="menu-text">{{item.a}}</text></view></view></view>
+=======
+<view><view class="{{['fab', b && 'collapsed']}}" bindtouchstart="{{c}}" bindtouchmove="{{d}}" bindtap="{{e}}" animation="{{f}}"><image class="fab-icon" mode="widthFix" src="{{a}}"/></view><view wx:if="{{g}}" class="menu-container" animation="{{i}}" catchtouchmove="{{j}}"><view wx:for="{{h}}" wx:for-item="item" wx:key="b" class="menu-item" animation="{{item.c}}" bindtap="{{item.d}}"><text class="menu-text">{{item.a}}</text></view></view></view>
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf

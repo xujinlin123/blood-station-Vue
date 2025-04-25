@@ -5,6 +5,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useMemberStore } from '@/stores'
 const memberStore = useMemberStore()
 
+<<<<<<< HEAD
 // 响应式数据
 const identitySelected = ref('')
 const userName = ref('')
@@ -27,10 +28,39 @@ const Token = ref('')
 const loadUserData = () => {
   if (memberStore.getProfile()) {
     console.log("获取到用户信息")
+=======
+  <script setup>
+import { ref, onMounted } from 'vue'
+  import { onLoad, onShow } from '@dcloudio/uni-app'
+  
+  // 响应式数据
+  const identitySelected = ref("兼职护士")
+  const userName = ref("张医生")
+  const userId = ref("MD12345")
+  const userAvatar = ref("https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png")
+  const showNameDialog = ref(false)
+  const newName = ref("")
+  const userPhoto = ref("https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/头像女孩.png")
+  const hospital = ref('广东省中医院')
+  const department = ref('检验科')
+  const userID = ref('440xxxxxxxxxxxxxxx')
+  const userGender = ref('女')
+  const userCertNo = ref('xxxx')
+  const isPageReady = ref(false)
+  const userYear = ref('2024')
+  const userBlood = ref('Rh阴性')
+  const Token = ref('')
+  
+  // 生命周期钩子
+  onLoad(() => {
+    isPageReady.value = false
+  
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     uni.getStorage({
       key: 'userIdentity',
       success: (res) => {
         identitySelected.value = res.data.Identity
+<<<<<<< HEAD
         Token.value = res.data.token   
         // 数据回显
         userName.value = memberStore.getProfile().name
@@ -192,8 +222,27 @@ const logout = () => {
         memberStore.clearProfile()
         console.log('用户已退出登录');
         identitySelected.value = '未登录'
+=======
+        isPageReady.value = true
+        Token.value = res.data.token
+      },
+      fail: () => {
+        isPageReady.value = true
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
       }
+    })
+  })
+  
+  // 加载用户数据
+  const loadUserData = () => {
+    const userInfo = uni.getStorageSync('userInfo')
+    if (userInfo) {
+      userName.value = userInfo.name || userName.value
+      userId.value = userInfo.id || userId.value
+      userRole.value = userInfo.role || userRole.value
+      userAvatar.value = userInfo.avatar || userAvatar.value
     }
+<<<<<<< HEAD
   })
 }
 
@@ -690,8 +739,178 @@ const goLogin = () => {
     </view>
   </view>
 </template>
+=======
+  }
+  
+  // 显示姓名编辑对话框
+  const showNameEditDialog = () => {
+    showNameDialog.value = true
+    newName.value = userName.value
+  }
+  
+  // 隐藏姓名编辑对话框
+  const hideNameEditDialog = () => {
+    showNameDialog.value = false
+  }
+  
+  // 处理姓名输入变化
+  const onNameInput = (e) => {
+    newName.value = e.detail.value
+  }
+  
+  // 确认修改姓名
+  const confirmNameChange = () => {
+    if (newName.value.trim()) {
+      let userInfo = uni.getStorageSync('userInfo') || {}
+      userInfo.name = newName.value
+      uni.setStorageSync('userInfo', userInfo)
+      
+      console.log("token:" + Token.value)
+      uni.request({
+        url: 'https://jobguard.online/api/auth/modify-name',
+        method: 'POST',
+        header: {
+          'Authorization': Token.value,
+          'Content-Type': 'application/json'
+        },
+        data: {
+          name: newName.value
+        },
+        success: (res) => {
+          console.log('后端返回:', res.data)
+          if (res.data.message == "success") {
+            uni.showToast({
+              title: '名字修改成功',
+              icon: 'success'
+            })
+            userName.value = newName.value
+            showNameDialog.value = false
+          } else {
+            uni.showToast({
+              title: res.data.message || '名字修改错误',
+              icon: 'none'
+            })
+          }
+        },
+        fail: (err) => {
+          console.error('请求失败:', err)
+          uni.showToast({
+            title: '网络错误，请稍后重试',
+            icon: 'none'
+          })
+        }
+      })
+    } else {
+      uni.showToast({
+        title: '名字不能为空',
+        icon: 'error'
+      })
+    }
+  }
+  
+  // 导航方法
+  const navigateToManageDonors = () => {
+    uni.navigateTo({
+      url: '/pages/manageDonors/manageDonors'
+    })
+  }
+  
+  const navigateToReviewApplications = () => {
+    uni.navigateTo({
+      url: '/pages/reviewApplications/reviewApplications'
+    })
+  }
+  
+  const navigateToBlacklist = () => {
+    uni.navigateTo({
+      url: '/pages/blacklist/blacklist'
+    })
+  }
+  
+  const navigateToNurseCert = () => {
+    uni.navigateTo({
+      url: '/pages/nurseCert/nurseCert'
+    })
+  }
+  
+  const navigateToDonorCert = () => {
+    uni.navigateTo({
+      url: '/pages/donorCert/donorCert'
+    })
+  }
+  
+  const navigateToDonationRecords = () => {
+    uni.navigateTo({
+      url: '/pages/donationRecords/donationRecords'
+    })
+  }
+  
+  const navigateToMessages = () => {
+    uni.navigateTo({
+      url: '/pages/messages/messages'
+    })
+  }
+  
+  const navigateToFeedback = () => {
+    uni.navigateTo({
+      url: '/pages/feedback/feedback'
+    })
+  }
+  
+  // 退出登录
+  const logout = () => {
+    uni.showModal({
+      title: '提示',
+      content: '确定要退出登录吗？',
+      success: (res) => {
+        if (res.confirm) {
+          uni.removeStorageSync('userInfo')
+          uni.removeStorageSync('token')
+          uni.reLaunch({
+            url: '/pages/login/login'
+          })
+        }
+      }
+    })
+  }
+  
+  // 检查更新
+  const checkUpdate = () => {
+    uni.showLoading({
+      title: '检查更新中...'
+    })
+    setTimeout(() => {
+      uni.hideLoading()
+      uni.showModal({
+        title: '版本更新',
+        content: '当前已是最新版本 v1.0.5',
+        showCancel: false
+      })
+    }, 1500)
+  }
+  
+  // 开始更新
+  const startUpdate = () => {
+    uni.showLoading({
+      title: '更新中...'
+    })
+    setTimeout(() => {
+      uni.hideLoading()
+      uni.showToast({
+        title: '更新成功',
+        icon: 'success'
+      })
+    }, 2000)
+  }
+  
+  // 阻止事件冒泡
+  const preventBubble = () => {
+    return
+  }
+</script>
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 
-<style>
+<style >
 /* pages/nurse/profile/profile.wxss */
 /* 页面基础样式 */
 page {
@@ -1033,5 +1252,4 @@ line-height: 1.1
   align-items: center; /* 垂直居中对齐 */
   font-size: 30rpx; /* 字体大小为30rpx */
 }
-
 </style>

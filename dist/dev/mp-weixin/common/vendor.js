@@ -1,4 +1,20 @@
 "use strict";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 /**
 * @vue/shared v3.4.21
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
@@ -40,7 +56,11 @@ const toTypeString = (value) => objectToString.call(value);
 const toRawType = (value) => {
   return toTypeString(value).slice(8, -1);
 };
+<<<<<<< HEAD
 const isPlainObject$1 = (val) => toTypeString(val) === "[object Object]";
+=======
+const isPlainObject = (val) => toTypeString(val) === "[object Object]";
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const isIntegerKey = (key) => isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key;
 const isReservedProp = /* @__PURE__ */ makeMap(
   // the leading comma is intentional so empty string "" is also included
@@ -160,7 +180,11 @@ const replacer = (_key, val) => {
     };
   } else if (isSymbol(val)) {
     return stringifySymbol(val);
+<<<<<<< HEAD
   } else if (isObject(val) && !isArray(val) && !isPlainObject$1(val)) {
+=======
+  } else if (isObject(val) && !isArray(val) && !isPlainObject(val)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     return String(val);
   }
   return val;
@@ -242,7 +266,11 @@ function getValueByDataPath(obj, path) {
 }
 function sortObject(obj) {
   let sortObj = {};
+<<<<<<< HEAD
   if (isPlainObject$1(obj)) {
+=======
+  if (isPlainObject(obj)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     Object.keys(obj).sort().forEach((key) => {
       const _key = key;
       sortObj[_key] = obj[_key];
@@ -260,7 +288,11 @@ function stringifyQuery(obj, encodeStr = encode) {
     let val = obj[key];
     if (typeof val === void 0 || val === null) {
       val = "";
+<<<<<<< HEAD
     } else if (isPlainObject$1(val)) {
+=======
+    } else if (isPlainObject(val)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
       val = JSON.stringify(val);
     }
     return encodeStr(key) + "=" + encodeStr(val);
@@ -485,7 +517,11 @@ function validateProtocols(name, args, protocol, onFail) {
   }
 }
 function validateProp$1(name, value, prop, isAbsent) {
+<<<<<<< HEAD
   if (!isPlainObject$1(prop)) {
+=======
+  if (!isPlainObject(prop)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     prop = { type: prop };
   }
   const { type, required, validator } = prop;
@@ -623,7 +659,11 @@ function normalizeErrMsg(errMsg, name) {
   return name + errMsg.substring(errMsg.indexOf(":fail"));
 }
 function createAsyncApiCallback(name, args = {}, { beforeAll, beforeSuccess } = {}) {
+<<<<<<< HEAD
   if (!isPlainObject$1(args)) {
+=======
+  if (!isPlainObject(args)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     args = {};
   }
   const { success, fail, complete } = getApiCallbacks(args);
@@ -745,7 +785,11 @@ function invokeApi(method, api, options, params) {
   return api(options, ...params);
 }
 function hasCallback(args) {
+<<<<<<< HEAD
   if (isPlainObject$1(args) && [API_SUCCESS, API_FAIL, API_COMPLETE].find((cb) => isFunction(args[cb]))) {
+=======
+  if (isPlainObject(args) && [API_SUCCESS, API_FAIL, API_COMPLETE].find((cb) => isFunction(args[cb]))) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     return true;
   }
   return false;
@@ -758,8 +802,23 @@ function promisify$1(name, fn) {
     if (hasCallback(args)) {
       return wrapperReturnValue(name, invokeApi(name, fn, args, rest));
     }
+<<<<<<< HEAD
     return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
       invokeApi(name, fn, extend(args, { success: resolve, fail: reject }), rest);
+=======
+<<<<<<< HEAD
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, fn, extend(args, { success: resolve, fail: reject }), rest);
+=======
+<<<<<<< HEAD
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve2, reject) => {
+      invokeApi(name, fn, extend(args, { success: resolve2, fail: reject }), rest);
+=======
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, fn, extend(args, { success: resolve, fail: reject }), rest);
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     })));
   };
 }
@@ -936,20 +995,34 @@ function dedupeHooks(hooks) {
   return res;
 }
 const addInterceptor = defineSyncApi(API_ADD_INTERCEPTOR, (method, interceptor) => {
+<<<<<<< HEAD
   if (isString(method) && isPlainObject$1(interceptor)) {
     mergeInterceptorHook(scopedInterceptors[method] || (scopedInterceptors[method] = {}), interceptor);
   } else if (isPlainObject$1(method)) {
+=======
+  if (isString(method) && isPlainObject(interceptor)) {
+    mergeInterceptorHook(scopedInterceptors[method] || (scopedInterceptors[method] = {}), interceptor);
+  } else if (isPlainObject(method)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     mergeInterceptorHook(globalInterceptors, method);
   }
 }, AddInterceptorProtocol);
 const removeInterceptor = defineSyncApi(API_REMOVE_INTERCEPTOR, (method, interceptor) => {
   if (isString(method)) {
+<<<<<<< HEAD
     if (isPlainObject$1(interceptor)) {
+=======
+    if (isPlainObject(interceptor)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
       removeInterceptorHook(scopedInterceptors[method], interceptor);
     } else {
       delete scopedInterceptors[method];
     }
+<<<<<<< HEAD
   } else if (isPlainObject$1(method)) {
+=======
+  } else if (isPlainObject(method)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     removeInterceptorHook(globalInterceptors, method);
   }
 }, RemoveInterceptorProtocol);
@@ -1074,7 +1147,19 @@ function invokeGetPushCidCallbacks(cid2, errMsg) {
   getPushCidCallbacks.length = 0;
 }
 const API_GET_PUSH_CLIENT_ID = "getPushClientId";
+<<<<<<< HEAD
 const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, reject }) => {
+=======
+<<<<<<< HEAD
+const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, reject }) => {
+=======
+<<<<<<< HEAD
+const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve: resolve2, reject }) => {
+=======
+const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, reject }) => {
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
   Promise.resolve().then(() => {
     if (typeof enabled === "undefined") {
       enabled = false;
@@ -1083,7 +1168,19 @@ const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, re
     }
     getPushCidCallbacks.push((cid2, errMsg) => {
       if (cid2) {
+<<<<<<< HEAD
         resolve({ cid: cid2 });
+=======
+<<<<<<< HEAD
+        resolve({ cid: cid2 });
+=======
+<<<<<<< HEAD
+        resolve2({ cid: cid2 });
+=======
+        resolve({ cid: cid2 });
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
       } else {
         reject(errMsg);
       }
@@ -1152,9 +1249,27 @@ function promisify(name, api) {
     if (isFunction(options.success) || isFunction(options.fail) || isFunction(options.complete)) {
       return wrapperReturnValue(name, invokeApi(name, api, options, rest));
     }
+<<<<<<< HEAD
     return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
       invokeApi(name, api, extend({}, options, {
         success: resolve,
+=======
+<<<<<<< HEAD
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, api, extend({}, options, {
+        success: resolve,
+=======
+<<<<<<< HEAD
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve2, reject) => {
+      invokeApi(name, api, extend({}, options, {
+        success: resolve2,
+=======
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, api, extend({}, options, {
+        success: resolve,
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
         fail: reject
       }), rest);
     })));
@@ -1168,7 +1283,11 @@ function initWrapper(protocols2) {
     };
   }
   function processArgs(methodName, fromArgs, argsOption = {}, returnValue = {}, keepFromArgs = false) {
+<<<<<<< HEAD
     if (isPlainObject$1(fromArgs)) {
+=======
+    if (isPlainObject(fromArgs)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
       const toArgs = keepFromArgs === true ? fromArgs : {};
       if (isFunction(argsOption)) {
         argsOption = argsOption(fromArgs, toArgs) || {};
@@ -1183,7 +1302,11 @@ function initWrapper(protocols2) {
             console.warn(`微信小程序 ${methodName} 暂不支持 ${key}`);
           } else if (isString(keyOption)) {
             toArgs[keyOption] = fromArgs[key];
+<<<<<<< HEAD
           } else if (isPlainObject$1(keyOption)) {
+=======
+          } else if (isPlainObject(keyOption)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
             toArgs[keyOption.name ? keyOption.name : key] = keyOption.value;
           }
         } else if (CALLBACKS.indexOf(key) !== -1) {
@@ -1808,9 +1931,12 @@ class EffectScope {
     }
   }
 }
+<<<<<<< HEAD
 function effectScope(detached) {
   return new EffectScope(detached);
 }
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 function recordEffectScope(effect2, scope = activeEffectScope) {
   if (scope && scope.active) {
     scope.effects.push(effect2);
@@ -1819,6 +1945,7 @@ function recordEffectScope(effect2, scope = activeEffectScope) {
 function getCurrentScope() {
   return activeEffectScope;
 }
+<<<<<<< HEAD
 function onScopeDispose(fn) {
   if (activeEffectScope) {
     activeEffectScope.cleanups.push(fn);
@@ -1828,6 +1955,8 @@ function onScopeDispose(fn) {
     );
   }
 }
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 let activeEffect;
 class ReactiveEffect {
   constructor(fn, trigger2, scheduler, scope) {
@@ -2077,10 +2206,13 @@ function trigger(target, type, key, newValue, oldValue, oldTarget) {
   }
   resetScheduling();
 }
+<<<<<<< HEAD
 function getDepFromReactive(object, key) {
   var _a;
   return (_a = targetMap.get(object)) == null ? void 0 : _a.get(key);
 }
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const isNonTrackableKeys = /* @__PURE__ */ makeMap(`__proto__,__v_isRef,__isVue`);
 const builtInSymbols = new Set(
   /* @__PURE__ */ Object.getOwnPropertyNames(Symbol).filter((key) => key !== "arguments" && key !== "caller").map((key) => Symbol[key]).filter(isSymbol)
@@ -2256,7 +2388,11 @@ const shallowReactiveHandlers = /* @__PURE__ */ new MutableReactiveHandler(
 const shallowReadonlyHandlers = /* @__PURE__ */ new ReadonlyReactiveHandler(true);
 const toShallow = (value) => value;
 const getProto = (v) => Reflect.getPrototypeOf(v);
+<<<<<<< HEAD
 function get$1(target, key, isReadonly2 = false, isShallow2 = false) {
+=======
+function get(target, key, isReadonly2 = false, isShallow2 = false) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
   target = target["__v_raw"];
   const rawTarget = toRaw(target);
   const rawKey = toRaw(key);
@@ -2408,7 +2544,11 @@ function createReadonlyMethod(type) {
 function createInstrumentations() {
   const mutableInstrumentations2 = {
     get(key) {
+<<<<<<< HEAD
       return get$1(this, key);
+=======
+      return get(this, key);
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     },
     get size() {
       return size(this);
@@ -2422,7 +2562,11 @@ function createInstrumentations() {
   };
   const shallowInstrumentations2 = {
     get(key) {
+<<<<<<< HEAD
       return get$1(this, key, false, true);
+=======
+      return get(this, key, false, true);
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     },
     get size() {
       return size(this);
@@ -2436,7 +2580,11 @@ function createInstrumentations() {
   };
   const readonlyInstrumentations2 = {
     get(key) {
+<<<<<<< HEAD
       return get$1(this, key, true);
+=======
+      return get(this, key, true);
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     },
     get size() {
       return size(this, true);
@@ -2452,7 +2600,11 @@ function createInstrumentations() {
   };
   const shallowReadonlyInstrumentations2 = {
     get(key) {
+<<<<<<< HEAD
       return get$1(this, key, true, true);
+=======
+      return get(this, key, true, true);
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     },
     get size() {
       return size(this, true);
@@ -2630,9 +2782,12 @@ function isReadonly(value) {
 function isShallow(value) {
   return !!(value && value["__v_isShallow"]);
 }
+<<<<<<< HEAD
 function isProxy(value) {
   return isReactive(value) || isReadonly(value);
 }
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 function toRaw(observed) {
   const raw = observed && observed["__v_raw"];
   return raw ? toRaw(raw) : observed;
@@ -2794,6 +2949,7 @@ const shallowUnwrapHandlers = {
 function proxyRefs(objectWithRefs) {
   return isReactive(objectWithRefs) ? objectWithRefs : new Proxy(objectWithRefs, shallowUnwrapHandlers);
 }
+<<<<<<< HEAD
 function toRefs(object) {
   if (!isProxy(object)) {
     warn$2(`toRefs() expects a reactive object but received a plain one.`);
@@ -2847,6 +3003,8 @@ function propertyToRef(source, key, defaultValue) {
   const val = source[key];
   return isRef(val) ? val : new ObjectRefImpl(source, key, defaultValue);
 }
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const stack = [];
 function pushWarningContext(vnode) {
   stack.push(vnode);
@@ -3473,6 +3631,56 @@ function setCurrentRenderingInstance(instance) {
   instance && instance.type.__scopeId || null;
   return prev;
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const COMPONENTS = "components";
+function resolveComponent(name, maybeSelfReference) {
+  return resolveAsset(COMPONENTS, name, true, maybeSelfReference) || name;
+}
+function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false) {
+  const instance = currentRenderingInstance || currentInstance;
+  if (instance) {
+    const Component2 = instance.type;
+    {
+      const selfName = getComponentName(
+        Component2,
+        false
+      );
+      if (selfName && (selfName === name || selfName === camelize(name) || selfName === capitalize(camelize(name)))) {
+        return Component2;
+      }
+    }
+    const res = (
+      // local registration
+      // check instance[type] first which is resolved for options API
+      resolve(instance[type] || Component2[type], name) || // global registration
+      resolve(instance.appContext[type], name)
+    );
+    if (!res && maybeSelfReference) {
+      return Component2;
+    }
+    if (warnMissing && !res) {
+      const extra = `
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement.`;
+      warn$1(`Failed to resolve ${type.slice(0, -1)}: ${name}${extra}`);
+    }
+    return res;
+  } else {
+    warn$1(
+      `resolve${capitalize(type.slice(0, -1))} can only be used in render() or setup().`
+    );
+  }
+}
+function resolve(registry, name) {
+  return registry && (registry[name] || registry[camelize(name)] || registry[capitalize(camelize(name))]);
+}
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const INITIAL_WATCHER_VALUE = {};
 function watch(source, cb, options) {
   if (!isFunction(cb)) {
@@ -3698,7 +3906,11 @@ function traverse(value, depth, currentDepth = 0, seen) {
     value.forEach((v) => {
       traverse(v, depth, currentDepth, seen);
     });
+<<<<<<< HEAD
   } else if (isPlainObject$1(value)) {
+=======
+  } else if (isPlainObject(value)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     for (const key in value) {
       traverse(value[key], depth, currentDepth, seen);
     }
@@ -3876,9 +4088,12 @@ function inject(key, defaultValue, treatDefaultAsFactory = false) {
     warn$1(`inject() can only be used inside setup() or functional components.`);
   }
 }
+<<<<<<< HEAD
 function hasInjectionContext() {
   return !!(currentInstance || currentRenderingInstance || currentApp);
 }
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
 function onActivated(hook, target) {
   registerKeepAliveHook(hook, "a", target);
@@ -3952,6 +4167,29 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     );
   }
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const createHook = (lifecycle) => (hook, target = currentInstance) => (
+  // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
+  (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
+);
+const onBeforeMount = createHook("bm");
+const onMounted = createHook("m");
+const onBeforeUpdate = createHook("bu");
+const onUpdated = createHook("u");
+const onBeforeUnmount = createHook("bum");
+const onUnmounted = createHook("um");
+const onServerPrefetch = createHook("sp");
+const onRenderTriggered = createHook(
+  "rtg"
+);
+const onRenderTracked = createHook(
+=======
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
@@ -3967,6 +4205,13 @@ const onRenderTriggered = createHook$1(
   "rtg"
 );
 const onRenderTracked = createHook$1(
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
   "rtc"
 );
 function onErrorCaptured(hook, target = currentInstance) {
@@ -6202,7 +6447,11 @@ function initHooks$1(options, instance, publicThis) {
 function applyOptions$2(options, instance, publicThis) {
   initHooks$1(options, instance, publicThis);
 }
+<<<<<<< HEAD
 function set$2(target, key, val) {
+=======
+function set(target, key, val) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
   return target[key] = val;
 }
 function $callMethod(method, ...args) {
@@ -6314,7 +6563,11 @@ function initApp(app) {
     uniIdMixin(globalProperties);
   }
   {
+<<<<<<< HEAD
     globalProperties.$set = set$2;
+=======
+    globalProperties.$set = set;
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     globalProperties.$applyOptions = applyOptions$2;
     globalProperties.$callMethod = $callMethod;
   }
@@ -6453,10 +6706,17 @@ function patchMPEvent(event, instance) {
       event.detail = typeof event.detail === "object" ? event.detail : {};
       event.detail.markerId = event.markerId;
     }
+<<<<<<< HEAD
     if (isPlainObject$1(event.detail) && hasOwn(event.detail, "checked") && !hasOwn(event.detail, "value")) {
       event.detail.value = event.detail.checked;
     }
     if (isPlainObject$1(event.detail)) {
+=======
+    if (isPlainObject(event.detail) && hasOwn(event.detail, "checked") && !hasOwn(event.detail, "value")) {
+      event.detail.value = event.detail.checked;
+    }
+    if (isPlainObject(event.detail)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
       event.target = extend({}, event.target, event.detail);
     }
   }
@@ -6998,10 +7258,17 @@ function initPageProps({ properties }, rawProps) {
         value: ""
       };
     });
+<<<<<<< HEAD
   } else if (isPlainObject$1(rawProps)) {
     Object.keys(rawProps).forEach((key) => {
       const opts = rawProps[key];
       if (isPlainObject$1(opts)) {
+=======
+  } else if (isPlainObject(rawProps)) {
+    Object.keys(rawProps).forEach((key) => {
+      const opts = rawProps[key];
+      if (isPlainObject(opts)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
         let value = opts.default;
         if (isFunction(value)) {
           value = value();
@@ -7025,7 +7292,11 @@ function findPropsData(properties, isPage2) {
 }
 function findPagePropsData(properties) {
   const propsData = {};
+<<<<<<< HEAD
   if (isPlainObject$1(properties)) {
+=======
+  if (isPlainObject(properties)) {
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     Object.keys(properties).forEach((name) => {
       if (builtInProps.indexOf(name) === -1) {
         propsData[name] = resolvePropValue(properties[name]);
@@ -7380,6 +7651,7 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createPluginApp = global.createPluginApp = createPluginApp;
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
+<<<<<<< HEAD
 /*!
  * pinia v3.0.2
  * (c) 2025 Eduardo San Martin Morote
@@ -8170,27 +8442,65 @@ function createPersistedState(options = {}) {
   };
 }
 var src_default = createPersistedState();
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+exports._export_sfc = _export_sfc;
+=======
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
 const onShow = /* @__PURE__ */ createHook(ON_SHOW);
 const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
+<<<<<<< HEAD
 exports.createPinia = createPinia;
 exports.createSSRApp = createSSRApp;
 exports.defineStore = defineStore;
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+exports.createSSRApp = createSSRApp;
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 exports.e = e;
 exports.f = f;
 exports.index = index;
 exports.n = n;
 exports.o = o;
+<<<<<<< HEAD
 exports.onBeforeUnmount = onBeforeUnmount;
 exports.onLoad = onLoad;
 exports.onMounted = onMounted;
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+exports.resolveComponent = resolveComponent;
+exports.s = s;
+exports.t = t;
+=======
+>>>>>>> temp-work
+exports.onBeforeUnmount = onBeforeUnmount;
+exports.onLoad = onLoad;
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 exports.onShow = onShow;
 exports.reactive = reactive;
 exports.ref = ref;
 exports.s = s;
+<<<<<<< HEAD
 exports.src_default = src_default;
 exports.t = t;
 exports.unref = unref;
 exports.wx$1 = wx$1;
+=======
+exports.t = t;
+exports.unref = unref;
+<<<<<<< HEAD
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf

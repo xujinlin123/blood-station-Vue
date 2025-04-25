@@ -1,10 +1,17 @@
 {
   "pages": [
+<<<<<<< HEAD
     "pages/nurse/information/information",
+=======
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     "pages/login/login",
     "pages/register/register",
     "pages/user-service/user-service",
     "pages/privacy-policy/privacy-policy",
+<<<<<<< HEAD
+=======
+    "pages/nurse/information/information",
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
     "pages/nurse/community/community",
     "pages/nurse/profile/profile"
   ],

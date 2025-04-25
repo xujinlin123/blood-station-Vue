@@ -1,6 +1,10 @@
 {
   "component": true,
+<<<<<<< HEAD
   "usingComponents": {
     "ai-avatar": "./ai-avatar"
   }
+=======
+  "usingComponents": {}
+>>>>>>> 48233f6d8a4fd65c2989f46576947d9a61d95ebf
 }
