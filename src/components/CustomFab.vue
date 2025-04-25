@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onBeforeUnmount } from 'vue'
+import aiAvatar from './ai-avatar.vue'
 
 // 响应式数据
 const menuItems = ref([
@@ -191,11 +192,12 @@ const handleMenuItem = (item) => {
       @tap="handleMainClick"
       :animation="fabAnimation"
     >
-      <image 
+      <!-- <image 
         class="fab-icon"
         mode="widthFix"
-        src="@/static/跳转.png" 
-      />
+        src="../static/images/ai.png" 
+      /> -->
+      <aiAvatar />
     </view>
     
     <!-- 子菜单 -->

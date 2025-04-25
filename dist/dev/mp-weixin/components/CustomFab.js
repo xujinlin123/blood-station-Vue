@@ -1,6 +1,9 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
-const common_assets = require("../common/assets.js");
+if (!Math) {
+  aiAvatar();
+}
+const aiAvatar = () => "./ai-avatar.js";
 const FAB_BASE_RIGHT = 90;
 const FAB_COLLAPSED_RIGHT = -48;
 const ANIMATION_DURATION = 300;
@@ -150,15 +153,14 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$3,
-        b: isFabCollapsed.value ? 1 : "",
-        c: common_vendor.o(handleTouchStart),
-        d: common_vendor.o(handleTouchMove),
-        e: common_vendor.o(handleMainClick),
-        f: fabAnimation.value,
-        g: showMenu.value
+        a: isFabCollapsed.value ? 1 : "",
+        b: common_vendor.o(handleTouchStart),
+        c: common_vendor.o(handleTouchMove),
+        d: common_vendor.o(handleMainClick),
+        e: fabAnimation.value,
+        f: showMenu.value
       }, showMenu.value ? {
-        h: common_vendor.f(menuItems.value, (item, index, i0) => {
+        g: common_vendor.f(menuItems.value, (item, index, i0) => {
           return {
             a: common_vendor.t(item.text),
             b: index,
@@ -166,8 +168,8 @@ const _sfc_main = {
             d: common_vendor.o(($event) => handleMenuItem(item), index)
           };
         }),
-        i: menuAnimation.value,
-        j: common_vendor.o(() => {
+        h: menuAnimation.value,
+        i: common_vendor.o(() => {
         })
       } : {});
     };
