@@ -1,5 +1,234 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
+import customFab from '@/components/CustomFab.vue'
+
+// 响应式数据
+const identitySelected = ref("")
+const scrollHeight = ref(250)
+const showPopup = ref(false)
+const showRecruitPage = ref(false)
+const showInfoPage = ref(false)
+const bloodTypes = ref(["Rh", "p", "JK"])
+const selectedBloodType = ref("请选择血型")
+const conditions = ref(["标准", "自定义"])
+const selectedCondition = ref("请选择献血条件")
+const recruitData = ref({})
+const infoList = ref([])
+const recruitType = ref('emergency')
+const infoType = ref('emergency')
+const Token = ref("")
+const activities = ref([
+  { 
+    id: 1, 
+    title: '稀有血型O型Rh阴性献血', 
+    count: 32, 
+    isSigned: false,
+    imageUrl: 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报.png' 
+  },
+  { 
+    id: 2, 
+    title: 'AB型血献血者紧急招募', 
+    count: 18, 
+    isSigned: false,
+    imageUrl: 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报2.png' 
+  },
+  { 
+    id: 3, 
+    title: 'AB型血献血者紧急招募', 
+    count: 25, 
+    isSigned: false,
+    imageUrl: 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报2.png' 
+  }
+])
+const showDonorInfoPage = ref(false)
+const donorList = ref([
+  { id: 1, name: '李想', bloodType: 'Rh阴型', age: '21周岁' },
+  { id: 2, name: '陈毅', bloodType: 'Rh阴型', age: '21周岁' }
+])
+const scienceList = ref([
+  {
+    question: "我是O型血，我是万能的吗？",
+    answer: "O型血是万能献血者，但只能接受O型血。O型血的红细胞没有A、B抗原，但血浆中含有抗A和抗B抗体，因此只能少量输给其他血型。",
+    isOpen: false
+  },
+  {
+    question: "稀有血型有哪几种？",
+    answer: "主要包括Rh阴性血型（如熊猫血）、孟买型、JK表型等。",
+    isOpen: false
+  },
+  {
+    question: '"熊猫血"是什么？"熊猫血"有多珍稀？',
+    answer: "Rh阴性血型的俗称，在中国汉族人口中仅占0.3%。",
+    subAnswer: "因稀缺性类似熊猫，故得名。需特别注意血源储备。",
+    isOpen: false
+  }
+])
+const showAnswerPage = ref(false)
+const currentQuestion = ref("")
+const currentAnswer = ref("")
+const currentSubAnswer = ref("")
+
+// 方法定义
+const showAnswerDialog = (e) => {
+  const index = e.currentTarget.dataset.index
+  const item = scienceList.value[index] || {}
+  console.log('点击问题：', item)
+  showAnswerPage.value = true
+  currentQuestion.value = item.question || "问题加载失败"
+  currentAnswer.value = item.answer || "答案未提供"
+  currentSubAnswer.value = item.subAnswer || ""
+}
+
+const goToDonorInfoPage = () => {
+  showRecruitPage.value = false
+  showDonorInfoPage.value = true
+}
+
+const viewDonorDetail = (e) => {
+  const id = e.currentTarget.dataset.id
+  uni.navigateTo({
+    url: `/pages/donor-detail/donor-detail?id=${id}`
+  })
+}
+
+const toggleSign = (e) => {
+  const index = e.currentTarget.dataset.index
+  activities.value = activities.value.map((item, i) => {
+    if (i === index) {
+      return {
+        ...item,
+        isSigned: !item.isSigned,
+        count: item.count + (item.isSigned ? -1 : 1)
+      }
+    }
+    return item
+  })
+}
+
+const goToRecruitPage = (e) => {
+  const type = e.currentTarget.dataset.type
+  showRecruitPage.value = true
+  recruitType.value = type
+}
+
+const goToInfoPage = (e) => {
+  const type = e.currentTarget.dataset.type
+  showInfoPage.value = true
+  infoType.value = type
+}
+
+const goBack = () => {
+  showRecruitPage.value = false
+  showDonorInfoPage.value = false
+  showPopup.value = false
+  showAnswerPage.value = false
+}
+
+const openPopup = () => {
+  showPopup.value = true
+}
+
+const closePopup = () => {
+  showPopup.value = false
+}
+
+const onBloodTypeChange = (e) => {
+  selectedBloodType.value = bloodTypes.value[e.detail.value]
+}
+
+const onConditionChange = (e) => {
+  selectedCondition.value = conditions.value[e.detail.value]
+}
+
+const onInputChange = (e) => {
+  const field = e.currentTarget.dataset.field
+  const value = e.detail.value
+  recruitData.value = { ...recruitData.value, [field]: value }
+}
+
+const submitRecruitment = () => {
+  console.log("提交招募信息2")
+  
+  if (selectedBloodType.value === "请选择血型" || selectedCondition.value === "请选择献血条件") {
+    uni.showToast({ title: "请选择血型和献血条件", icon: "none" })
+    return
+  }
+  
+  console.log(selectedBloodType.value)
+  
+  const newRecruit = {
+    bloodType: selectedBloodType.value,
+    recruitTime: recruitData.value.recruitTime || "未填写",
+    location: recruitData.value.location || "未填写",
+    targetGroup: recruitData.value.targetGroup || "未填写",
+    recruitNumber: recruitData.value.recruitNumber || "未填写",
+    condition: selectedCondition.value,
+    timestamp: new Date().getTime()
+  }
+  
+  console.log(recruitData.value)
+  console.log(recruitData.value["targetGroup"])
+  
+  uni.request({
+    url: 'https://jobguard.online/api/activity/publish-activity',
+    method: 'POST',
+    header: {
+      'Authorization': Token.value,
+      'Content-Type': 'application/json'
+    },
+    data: {
+      "bloodType": selectedBloodType.value,
+      "timeRange": recruitData.value["recruitTime"],
+      "address": recruitData.value["location"],
+      "targetPeople": recruitData.value["targetGroup"],
+      "maxParticipateCount": recruitData.value["recruitNumber"],
+      "needs": selectedCondition.value,
+      "isEmergency": "true",
+      "coverUrl": "https://img.tusij.com/tgs_assets/ips_templ_preview/25/c0/9b/lg_3403740_1614845676_604096ec325be.jpg?auth_key=2315410104-0-0-b848c59237ac0883581cddafd780ae65&x-oss-process=image/resize,m_fixed,h_298,w_700",
+      "title": "111"
+    },
+    success: (res) => {
+      console.log('后端返回:', res.data)
+    },
+    fail: (err) => {
+      console.error('请求失败:', err)
+      uni.showToast({
+        title: '网络错误，请稍后重试',
+        icon: 'none'
+      })
+    }
+  })
+  
+  infoList.value = [newRecruit, ...infoList.value]
+  showPopup.value = false
+  selectedBloodType.value = "请选择血型"
+  selectedCondition.value = "请选择献血条件"
+  recruitData.value = {}
+  
+  uni.showToast({ title: "发布成功", icon: "success" })
+}
+
+// 生命周期钩子
+onLoad(() => {
+  uni.getStorage({
+    key: 'userIdentity',
+    success: (res) => {
+      identitySelected.value = res.data.Identity
+      Token.value = res.data.token
+      console.log(res.data)  
+      console.log(identitySelected.value)
+    },
+    fail: () => {
+      console.error('获取数据失败')
+    }
+  })
+})
+</script>
+
 <template>
     <view>
+      <customFab />
       <!-- 页面 1 -->
       <view class="page-container1" v-if="!showRecruitPage && !showDonorInfoPage && !showAnswerPage">
         <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png" class="page-background" mode="aspectFill"></image>
@@ -28,6 +257,10 @@
             <view class="icon-item" @tap="goToRecruitPage" data-type="activity">
               <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/发布献血者活动通知.png" class="function-icon"></image>
               <text class="icon-text">招募活动发布</text>
+            </view>
+            <view class="icon-item" @tap="goToLecturePage">
+              <image src="../../../static/images/主题讲座.png" class="function-icon"></image>
+              <text class="icon-text">主题讲座</text>
             </view>
             <view class="icon-item" @tap="goToDonorInfoPage">
               <image src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/管理献血者信息.png" class="function-icon"></image>
@@ -97,10 +330,16 @@
                 <!-- 点击问题触发 showAnswerDialog 方法，并传递索引 -->
                 <view class="qa-item" @tap="showAnswerDialog" :data-index="index">
                   <view class="question">
-                    <text class="q-mark">Q{{ index + 1 }}.</text>
-                    {{ item.question }}
+                    <!-- <text class="q-mark">Q{{ index + 1 }}.</text> -->
+                     <image
+                      class="rankingIcon"
+                      mode="scaleToFill"
+                       :src="`https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/hoticon${index+1}.png`"
+                     />
+                    <text>{{ item.question }}</text>
+                    <text class="hotText">热</text>
                     <!-- <image class="arrow" src="https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/进入.png"/> -->
-                    <image class="arrow" src="/src/static/images/hoticon1.png"/>
+                    <!-- <image class="arrow" src="/src/static/images/hoticon1.png"/> -->
                   </view>
                 </view>
               </template>
@@ -297,253 +536,10 @@
           </view>
         </view>
       </view>
+
+
     </view>
-  </template>
-  
-
-<script>
-export default {
-  data() {
-    return {
-      identitySelected: "",
-      scrollHeight: 250,  
-      showPopup: false, // 控制弹窗
-      showRecruitPage: false, // 控制页面切换，默认显示主页
-      showInfoPage: false,
-      bloodTypes: ["Rh", "p", "JK"],
-      selectedBloodType: "请选择血型",
-      conditions: ["标准", "自定义"],
-      selectedCondition: "请选择献血条件",
-      recruitData: {},
-      infoList: [],
-      recruitType: 'emergency',
-      infoType: 'emergency',
-      Token: "",
-      activities: [
-        { id: 1, title: '稀有血型O型Rh阴性献血', count: 32, isSigned: false,
-        imageUrl: 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报.png' },
-        { id: 2, title: 'AB型血献血者紧急招募', count: 18, isSigned: false,
-        imageUrl: 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报2.png' },
-        { id: 3, title: 'AB型血献血者紧急招募', count: 25, isSigned: false,
-        imageUrl: 'https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/献血活动海报2.png' }
-      ],
-      showDonorInfoPage: false, // 控制献血者信息页面显示
-      donorList: [ 
-        { id: 1, name: '李想', bloodType: 'Rh阴型', age: '21周岁' },
-        { id: 2, name: '陈毅', bloodType: 'Rh阴型', age: '21周岁' }
-      ],
-      scienceList: [
-        {
-          question: "我是O型血，我是万能的吗？",
-          answer: "O型血是万能献血者，但只能接受O型血。O型血的红细胞没有A、B抗原，但血浆中含有抗A和抗B抗体，因此只能少量输给其他血型。",
-          isOpen: false // 控制折叠状态
-        },
-        {
-          question: "稀有血型有哪几种？",
-          answer: "主要包括Rh阴性血型（如熊猫血）、孟买型、JK表型等。",
-          isOpen: false
-        },
-        {
-          question: '"熊猫血"是什么？"熊猫血"有多珍稀？',
-          answer: "Rh阴性血型的俗称，在中国汉族人口中仅占0.3%。",
-          subAnswer: "因稀缺性类似熊猫，故得名。需特别注意血源储备。",
-          isOpen: false
-        }
-      ],
-      showAnswerPage: false,
-      currentQuestion: "",
-      currentAnswer: "",
-      currentSubAnswer: ""
-    }
-  },
-  
-  methods: {
-    // 点击问题触发
-    showAnswerDialog(e) {
-      const index = e.currentTarget.dataset.index;
-      const item = this.scienceList[index] || {};
-      console.log('点击问题：', item); // 调试输出问题和答案
-      this.showAnswerPage = true;
-      this.currentQuestion = item.question || "问题加载失败";
-      this.currentAnswer = item.answer || "答案未提供";
-      this.currentSubAnswer = item.subAnswer || "";
-    },
-    
-    // 跳转到献血者信息页面
-    goToDonorInfoPage() {
-      this.showRecruitPage = false;
-      this.showDonorInfoPage = true;
-    },
-    
-    // 查看详情
-    viewDonorDetail(e) {
-      const id = e.currentTarget.dataset.id;
-      uni.navigateTo({
-        url: `/pages/donor-detail/donor-detail?id=${id}`
-      });
-    },
-    
-    toggleSign(e) {
-      const index = e.currentTarget.dataset.index;
-      const activities = this.activities.map((item, i) => {
-        if (i === index) {
-          return {
-            ...item,
-            isSigned: !item.isSigned,
-            count: item.count + (item.isSigned ? -1 : 1)
-          };
-        }
-        return item;
-      });
-      this.activities = activities;
-    },
-    
-    // **跳转发布页面**
-    goToRecruitPage(e) {
-      const type = e.currentTarget.dataset.type; // 获取按钮类型（emergency/activity）
-      this.showRecruitPage = true;
-      this.recruitType = type; // 存储发布类型
-    },
-  
-    // **跳转查看页面**
-    goToInfoPage(e) {
-      const type = e.currentTarget.dataset.type; // 获取按钮类型（emergency/activity）
-      this.showInfoPage = true;
-      this.infoType = type; // 存储发布类型
-    },
-
-    // **返回主页面**
-    goBack() {
-      this.showRecruitPage = false;
-      this.showDonorInfoPage = false;
-      this.showPopup = false;
-      this.showAnswerPage = false;
-    }, 
-  
-    // 打开弹窗
-    openPopup() {
-      this.showPopup = true;
-    },
-  
-    // 关闭弹窗
-    closePopup() {
-      this.showPopup = false;
-    },
-  
-    // 处理血型选择变化
-    onBloodTypeChange(e) {
-      this.selectedBloodType = this.bloodTypes[e.detail.value];
-      //e.detail.value是当前选择的那个选项的index
-    },
-  
-    // 处理献血条件选择变化
-    onConditionChange(e) {
-      this.selectedCondition = this.conditions[e.detail.value];
-    },
-  
-    // 处理输入框数据变化
-    onInputChange(e) {
-      let field = e.currentTarget.dataset.field;
-      let value = e.detail.value;
-      this.recruitData = { ...this.recruitData, [field]: value };
-    },
-  
-    // 提交招募信息
-    submitRecruitment() {
-      console.log("提交招募信息2");
-      let { recruitData, selectedBloodType, selectedCondition, infoList } = this;
-      
-      if (selectedBloodType === "请选择血型" || selectedCondition === "请选择献血条件") {
-        uni.showToast({ title: "请选择血型和献血条件", icon: "none" });
-        return;
-      }
-      
-      console.log(this.selectedBloodType);
-      
-      let newRecruit = {
-        bloodType: selectedBloodType,
-        recruitTime: recruitData.recruitTime || "未填写",
-        location: recruitData.location || "未填写",
-        targetGroup: recruitData.targetGroup || "未填写",
-        recruitNumber: recruitData.recruitNumber || "未填写",
-        condition: selectedCondition,
-        timestamp: new Date().getTime()
-      };
-      
-      console.log(this.recruitData);
-      console.log(this.recruitData["targetGroup"]);
-      
-      uni.request({
-        url: 'https://jobguard.online/api/activity/publish-activity', // 替换为你的后端 API 地址
-        method: 'POST', //请求方式
-        header: {
-          'Authorization': this.Token,
-          'Content-Type': 'application/json' //请求头格式为json
-        },
-        //请求体
-        data: {
-          "bloodType": this.selectedBloodType,
-          "timeRange": this.recruitData["recruitTime"],
-          "address": this.recruitData["location"],
-          "targetPeople": this.recruitData["targetGroup"],
-          "maxParticipateCount": this.recruitData["recruitNumber"],
-          "needs": this.selectedCondition,
-          "isEmergency": "true",
-          "coverUrl": "https://img.tusij.com/tgs_assets/ips_templ_preview/25/c0/9b/lg_3403740_1614845676_604096ec325be.jpg?auth_key=2315410104-0-0-b848c59237ac0883581cddafd780ae65&x-oss-process=image/resize,m_fixed,h_298,w_700",//这里固定默认的活动图片
-          "title": "111" //标题
-        },
-        success: (res) => { //请求成功回调
-          console.log('后端返回:', res.data); //打印信息进行调试
-        },
-        //请求失败
-        fail: (err) => {
-          console.error('请求失败:', err);
-          uni.showToast({
-            title: '网络错误，请稍后重试',
-            icon: 'none'
-          });
-        }
-      });
-      
-      this.infoList = [newRecruit, ...infoList];
-      this.showPopup = false;
-      this.selectedBloodType = "请选择血型";
-      this.selectedCondition = "请选择献血条件";
-      this.recruitData = {};
-      
-      uni.showToast({ title: "发布成功", icon: "success" });
-    },
-    
-    // 方式一：直接赋值替代setData
-    setData: function(obj) {
-      for (let key in obj) {
-        this[key] = obj[key];
-      }
-    }
-  },
-  
-  // 生命周期函数直接放到export default下
-  onLoad() {
-    // 获取本地存储的数据
-    uni.getStorage({
-      key: 'userIdentity', // 要获取的 key
-      success: (res) => {
-        this.identitySelected = res.data.Identity; // 获取到的数据存入页面的 data 中
-        this.Token = res.data.token;
-        console.log(res.data);  
-        console.log(this.identitySelected);
-      },
-      fail: () => {
-        console.error('获取数据失败');
-      }
-    });
-  },
-  
-  onShow() {
-    // 原代码没有onShow方法
-  }
-}
-</script>
+</template>
 
 <style>
 /* pages/nurse/information/information.wxss */
@@ -680,6 +676,7 @@ page {
     padding: 15rpx 0;
     border-bottom: 1rpx solid #eee;
     margin-bottom: 20rpx;
+    background-color: #f79999;
 }
 
 /* 活动背景图片，填充整个容器 */
@@ -1096,6 +1093,8 @@ page {
   /* 板块标题 */
   .section{
     background-color: rgb(247, 153, 153);
+    width: 92%;
+    border-radius: 16rpx;
   }
   
   
@@ -1113,14 +1112,16 @@ page {
     margin: 1px;
     padding: 15px;
     height: 15rpx;
-    background: #fff;
+    display: flex;
+    align-items: center;
     border-radius: 3px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: linear-gradient(to right,#febab7, #fff);
   }
   
   .question {
     font-size: 14px;
-    color: #666;
+    color: black;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -1138,6 +1139,21 @@ page {
     width: 16px;
     height: 16px;
     margin-left: auto;
+  }
+
+  /* 排行榜图标设置 */
+  .rankingIcon{
+    width: 16px;
+    height: 16px;
+    margin-right: 10rpx;
+  }
+
+  .hotText{
+    display: block;
+    background-color: #fdbebb;
+    padding: 8rpx;
+    border-radius: 8rpx;
+    color: #d9534f;
   }
   
   .answer {

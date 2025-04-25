@@ -1,0 +1,181 @@
+
+page{
+    background-image: url('https://blood-station-1327665268.cos.ap-guangzhou.myqcloud.com/background.png');
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 200rpx;
+}
+
+/* 对容器进行设置 */
+.container{
+    width: 100%;
+    padding: 10rpx 50rpx;
+}
+.return{
+    width: 50rpx;
+    height: 50rpx;
+    margin-left: 20rpx;
+    margin-bottom: 20rpx;
+}
+
+/* 普通用户登录 */
+.loginBox{
+    background-color: #fdf4f5;
+    border-radius: 20rpx;
+    padding: 30rpx;
+    margin-bottom: 20rpx;
+    /* height: 800rpx; */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+.login-title{
+    font-size: 36rpx;
+    font-weight: bold;
+    margin-bottom: 20rpx;
+}
+
+/* 登录模块设置 */
+.login-method{
+    margin: 71rpx 0;
+}
+.login-button{
+    color: white;
+    border-radius: 10rpx;
+    text-align: center;
+    font-size: 28rpx;
+    margin-bottom: 30rpx;
+    width: 70%;
+}
+.weChat{
+    background-color: #3ac13c;
+}
+.phone{
+    background-color: #2d6df9;
+}
+.loginIcon{
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    width: 100%;
+}
+.loginBg{
+    width: 70%;
+    margin-bottom: -30rpx;
+}
+
+/* 协议设置 */
+.agreement {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 24rpx;
+  color: #666;
+}
+.protocol-link {
+  color: #003399;
+}
+.checkbox {
+  transform: scale(0.6);
+}
+
+/* 添加下划线 */
+.switchLogin {
+    text-decoration: underline;
+    color: white;
+    font-size: 28rpx;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* 身份选择 */
+.identitySelect{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20rpx;
+}
+
+/* 统一盒子 */
+.inputBox{
+    margin-bottom: 30rpx;
+    position: relative;
+}
+
+/* 切换密码 */
+.toggle-password{
+    position: absolute;
+    right: 50rpx;
+    bottom: 20rpx;
+    z-index: 999;
+}
+.password-icon{
+    width: 40rpx;
+    height: 40rpx;
+}
+.identityBox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10rpx;
+    background-color: #fff;
+    border-radius: 10rpx;
+}
+.identityIcon{
+    width: 70rpx;
+    height: 70rpx;
+    margin-right: 10rpx;
+}
+.login-input{
+    margin-top: 20rpx;
+    height: 80rpx;
+    border-radius: 10rpx;
+    padding: 10rpx 20rpx;
+    background-color: #fff;
+    border: none;
+    font-size: 28rpx;
+    color: #333;
+}
+
+/* 选中状态的样式 */
+.selected {
+  background-color: #f57371;
+  color: white;
+}
+.identityIcon.selected {
+  filter: invert(100%);
+}
+.loginButton{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50rpx;
+}
+.loginButtonBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100rpx;
+    height: 100rpx;
+    background-color: #f36d6a;
+    border-radius: 50%;
+    padding: 20rpx;
+    font-size: 24rpx;
+    color:#fff;
+    margin-bottom: 50rpx;
+}
+.loginImage{
+    width: 70%;
+    height: 70%;
+}
+.forgetPassword{
+    display: flex;
+    justify-content: center;
+    color: #666;
+    font-size: 24rpx;
+}
