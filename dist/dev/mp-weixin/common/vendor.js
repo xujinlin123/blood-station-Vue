@@ -1,4 +1,17 @@
 "use strict";
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const _export_sfc = (sfc, props) => {
+  const target = sfc.__vccOpts || sfc;
+  for (const [key, val] of props) {
+    target[key] = val;
+  }
+  return target;
+};
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
 /**
 * @vue/shared v3.4.21
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
@@ -758,8 +771,18 @@ function promisify$1(name, fn) {
     if (hasCallback(args)) {
       return wrapperReturnValue(name, invokeApi(name, fn, args, rest));
     }
+<<<<<<< HEAD
     return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
       invokeApi(name, fn, extend(args, { success: resolve, fail: reject }), rest);
+=======
+<<<<<<< HEAD
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve2, reject) => {
+      invokeApi(name, fn, extend(args, { success: resolve2, fail: reject }), rest);
+=======
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, fn, extend(args, { success: resolve, fail: reject }), rest);
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
     })));
   };
 }
@@ -1074,7 +1097,15 @@ function invokeGetPushCidCallbacks(cid2, errMsg) {
   getPushCidCallbacks.length = 0;
 }
 const API_GET_PUSH_CLIENT_ID = "getPushClientId";
+<<<<<<< HEAD
 const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, reject }) => {
+=======
+<<<<<<< HEAD
+const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve: resolve2, reject }) => {
+=======
+const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, reject }) => {
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
   Promise.resolve().then(() => {
     if (typeof enabled === "undefined") {
       enabled = false;
@@ -1083,7 +1114,15 @@ const getPushClientId = defineAsyncApi(API_GET_PUSH_CLIENT_ID, (_, { resolve, re
     }
     getPushCidCallbacks.push((cid2, errMsg) => {
       if (cid2) {
+<<<<<<< HEAD
         resolve({ cid: cid2 });
+=======
+<<<<<<< HEAD
+        resolve2({ cid: cid2 });
+=======
+        resolve({ cid: cid2 });
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
       } else {
         reject(errMsg);
       }
@@ -1152,9 +1191,21 @@ function promisify(name, api) {
     if (isFunction(options.success) || isFunction(options.fail) || isFunction(options.complete)) {
       return wrapperReturnValue(name, invokeApi(name, api, options, rest));
     }
+<<<<<<< HEAD
     return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
       invokeApi(name, api, extend({}, options, {
         success: resolve,
+=======
+<<<<<<< HEAD
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve2, reject) => {
+      invokeApi(name, api, extend({}, options, {
+        success: resolve2,
+=======
+    return wrapperReturnValue(name, handlePromise(new Promise((resolve, reject) => {
+      invokeApi(name, api, extend({}, options, {
+        success: resolve,
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
         fail: reject
       }), rest);
     })));
@@ -3401,6 +3452,53 @@ function setCurrentRenderingInstance(instance) {
   instance && instance.type.__scopeId || null;
   return prev;
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const COMPONENTS = "components";
+function resolveComponent(name, maybeSelfReference) {
+  return resolveAsset(COMPONENTS, name, true, maybeSelfReference) || name;
+}
+function resolveAsset(type, name, warnMissing = true, maybeSelfReference = false) {
+  const instance = currentRenderingInstance || currentInstance;
+  if (instance) {
+    const Component2 = instance.type;
+    {
+      const selfName = getComponentName(
+        Component2,
+        false
+      );
+      if (selfName && (selfName === name || selfName === camelize(name) || selfName === capitalize(camelize(name)))) {
+        return Component2;
+      }
+    }
+    const res = (
+      // local registration
+      // check instance[type] first which is resolved for options API
+      resolve(instance[type] || Component2[type], name) || // global registration
+      resolve(instance.appContext[type], name)
+    );
+    if (!res && maybeSelfReference) {
+      return Component2;
+    }
+    if (warnMissing && !res) {
+      const extra = `
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement.`;
+      warn$1(`Failed to resolve ${type.slice(0, -1)}: ${name}${extra}`);
+    }
+    return res;
+  } else {
+    warn$1(
+      `resolve${capitalize(type.slice(0, -1))} can only be used in render() or setup().`
+    );
+  }
+}
+function resolve(registry, name) {
+  return registry && (registry[name] || registry[camelize(name)] || registry[capitalize(camelize(name))]);
+}
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
 const INITIAL_WATCHER_VALUE = {};
 function watch(source, cb, options) {
   if (!isFunction(cb)) {
@@ -3877,6 +3975,26 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     );
   }
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+const createHook = (lifecycle) => (hook, target = currentInstance) => (
+  // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
+  (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
+);
+const onBeforeMount = createHook("bm");
+const onMounted = createHook("m");
+const onBeforeUpdate = createHook("bu");
+const onUpdated = createHook("u");
+const onBeforeUnmount = createHook("bum");
+const onUnmounted = createHook("um");
+const onServerPrefetch = createHook("sp");
+const onRenderTriggered = createHook(
+  "rtg"
+);
+const onRenderTracked = createHook(
+=======
+>>>>>>> temp-work
 const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
@@ -3892,6 +4010,10 @@ const onRenderTriggered = createHook$1(
   "rtg"
 );
 const onRenderTracked = createHook$1(
+<<<<<<< HEAD
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
   "rtc"
 );
 function onErrorCaptured(hook, target = currentInstance) {
@@ -7305,17 +7427,35 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createPluginApp = global.createPluginApp = createPluginApp;
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+exports._export_sfc = _export_sfc;
+=======
+>>>>>>> temp-work
 const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
   !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
 };
 const onShow = /* @__PURE__ */ createHook(ON_SHOW);
 const onLoad = /* @__PURE__ */ createHook(ON_LOAD);
+<<<<<<< HEAD
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
 exports.createSSRApp = createSSRApp;
 exports.e = e;
 exports.f = f;
 exports.index = index;
 exports.n = n;
 exports.o = o;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+exports.resolveComponent = resolveComponent;
+exports.s = s;
+exports.t = t;
+=======
+>>>>>>> temp-work
 exports.onBeforeUnmount = onBeforeUnmount;
 exports.onLoad = onLoad;
 exports.onShow = onShow;
@@ -7324,3 +7464,7 @@ exports.ref = ref;
 exports.s = s;
 exports.t = t;
 exports.unref = unref;
+<<<<<<< HEAD
+=======
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work

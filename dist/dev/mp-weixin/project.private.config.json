@@ -1,6 +1,14 @@
 {
   "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html",
+<<<<<<< HEAD
   "projectname": "",
+=======
+<<<<<<< HEAD
+  "projectname": "blood-station-Vue1",
+=======
+  "projectname": "",
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
   "setting": {
     "compileHotReLoad": true
   },
@@ -37,5 +45,14 @@
         }
       ]
     }
+<<<<<<< HEAD
   }
+=======
+<<<<<<< HEAD
+  },
+  "libVersion": "3.8.0"
+=======
+  }
+>>>>>>> 4731ddd (重新上传，修改了进入科普、协议等的文字部分和管理员页面的血库可视化部分)
+>>>>>>> temp-work
 }
